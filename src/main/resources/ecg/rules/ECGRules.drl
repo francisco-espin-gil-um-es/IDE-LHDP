@@ -1,0 +1,26 @@
+package com.sample.rules;
+
+import com.ecg.ECGData;
+
+rule "Calcular frecuencia cardíaca"
+when
+    $ecg : ECGData( voltajes != null )
+then
+    // Aquí realizas los cálculos para los intervalos y frecuencia cardíaca
+    double frecuenciaCardiaca = calcularFrecuenciaCardiaca($ecg.getVoltajes());
+    modify($ecg) { setFrecuenciaCardiaca(frecuenciaCardiaca); }
+end
+
+rule "Detectar Taquicardia"
+when
+    $ecg : ECGData( frecuenciaCardiaca > 100 )
+then
+    System.out.println("¡Taquicardia detectada!");
+end
+
+rule "Detectar Bradicardia"
+when
+    $ecg : ECGData( frecuenciaCardiaca < 60 )
+then
+    System.out.println("¡Bradicardia detectada!");
+end
