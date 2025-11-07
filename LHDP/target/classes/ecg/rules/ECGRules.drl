@@ -1,26 +1,122 @@
-package com.sample.rules;
+package ecg.rules;
+dialect "java"
 
-import com.ecg.ECGData;
+import ecg.ECGData;
+import ecg.Ciclo;
+import ecg.OndaP;
+import ecg.OndaQ;
+import ecg.OndaR;
+import ecg.OndaS;
+import ecg.OndaT;
+import ecg.IntervaloPR;
+import ecg.ComplejoQRS;
+import ecg.IntervaloQT;
+import ecg.IntervaloRR;
+import ecg.FrecuenciaCardiaca;
 
-rule "Calcular frecuencia cardíaca"
+// Regla 1: Detectar Intervalo PR
+// Cuando hay una P y una Q del mismo ciclo, crear el intervalo PR
+rule "Detectar Intervalo PR"
 when
-    $ecg : ECGData( voltajes != null )
+    $p : OndaP( $ciclo : ciclo, $inicioP : inicio )
+    $q : OndaQ( ciclo == $ciclo, $inicioQ : inicio )
+    not( IntervaloPR( ciclo == $ciclo ) )
 then
-    // Aquí realizas los cálculos para los intervalos y frecuencia cardíaca
-    double frecuenciaCardiaca = calcularFrecuenciaCardiaca($ecg.getVoltajes());
-    modify($ecg) { setFrecuenciaCardiaca(frecuenciaCardiaca); }
+    insert( new IntervaloPR($inicioP, $inicioQ, $ciclo) );
+    System.out.println("Intervalo PR detectado en ciclo " + $ciclo);
 end
 
-rule "Detectar Taquicardia"
+// Regla 2: Detectar Complejo QRS
+// Cuando hay una Q y una S del mismo ciclo, crear el complejo QRS
+rule "Detectar Complejo QRS"
 when
-    $ecg : ECGData( frecuenciaCardiaca > 100 )
+    $q : OndaQ( $ciclo : ciclo, $inicioQ : inicio )
+    $s : OndaS( ciclo == $ciclo, $finS : fin )
+    not( ComplejoQRS( ciclo == $ciclo ) )
 then
-    System.out.println("¡Taquicardia detectada!");
+    insert( new ComplejoQRS($inicioQ, $finS, $ciclo) );
+    System.out.println("Complejo QRS detectado en ciclo " + $ciclo);
 end
 
-rule "Detectar Bradicardia"
+// Regla 3: Detectar Intervalo QT
+// Cuando hay una Q y una T del mismo ciclo, crear el intervalo QT
+rule "Detectar Intervalo QT"
 when
-    $ecg : ECGData( frecuenciaCardiaca < 60 )
+    $q : OndaQ( $ciclo : ciclo, $inicioQ : inicio )
+    $t : OndaT( ciclo == $ciclo, $finT : fin )
+    not( IntervaloQT( ciclo == $ciclo ) )
 then
-    System.out.println("¡Bradicardia detectada!");
+    insert( new IntervaloQT($inicioQ, $finT, $ciclo) );
+    System.out.println("Intervalo QT detectado en ciclo " + $ciclo);
 end
+
+// Regla 4: Detectar Intervalo RR
+// Cuando hay dos ondas R de ciclos consecutivos, crear el intervalo RR
+rule "Detectar Intervalo RR"
+when
+    $r1 : OndaR( $ciclo1 : ciclo, $tiempoR1 : inicio )
+    $r2 : OndaR( ciclo == ($ciclo1 + 1), $tiempoR2 : inicio )
+    not( IntervaloRR( cicloAnterior == $ciclo1, cicloSiguiente == ($ciclo1 + 1) ) )
+then
+    insert( new IntervaloRR($tiempoR1, $tiempoR2, $ciclo1, $ciclo1 + 1) );
+end
+
+// Regla 5: Calcular Frecuencia Cardíaca
+// Usa el primer y último intervalo RR para calcular la FC
+rule "Calcular Frecuencia Cardiaca"
+when
+    $r1 : OndaR( $primerCiclo : ciclo, $tiempoInicio : inicio )
+    not( OndaR( ciclo < $primerCiclo ) )
+    $r2 : OndaR( $ultimoCiclo : ciclo, $tiempoFin : inicio )
+    not( OndaR( ciclo > $ultimoCiclo ) )
+    not( FrecuenciaCardiaca() )
+    eval( $ultimoCiclo > $primerCiclo )
+then
+    double tiempoTotal = $tiempoFin - $tiempoInicio;
+    int numeroCiclos = $ultimoCiclo - $primerCiclo + 1;
+    double fc = (numeroCiclos / tiempoTotal) * 60000.0;
+    insert( new FrecuenciaCardiaca(fc, "Total ciclos / tiempo total") );
+    System.out.println("Frecuencia cardiaca: " + fc + " pul/min (" + numeroCiclos + " ciclos)");
+end
+
+// Regla 6: Actualizar ECGData con la frecuencia calculada
+rule "Actualizar ECGData con Frecuencia"
+when
+    $fc : FrecuenciaCardiaca( $valor : valor )
+    $ecg : ECGData( frecuenciaCardiaca == 0.0 )
+then
+    modify($ecg) { setFrecuenciaCardiaca($valor) };
+end
+
+// Regla 7: Detectar Taquicardia
+rule "Taquicardia"
+when
+    FrecuenciaCardiaca( valor > 100 )
+then
+    System.out.println("¡ALERTA: Taquicardia detectada!");
+end
+
+// Regla 8: Detectar Bradicardia
+rule "Bradicardia"
+when
+    FrecuenciaCardiaca( valor > 0, valor < 60 )
+then
+    System.out.println("¡ALERTA: Bradicardia detectada!");
+end
+
+// Regla 9: Informar Intervalos PR anormales
+rule "Intervalo PR anormal"
+when
+    $pr : IntervaloPR( duracion < 120 || duracion > 200 )
+then
+    System.out.println("Intervalo PR anormal en ciclo " + $pr.getCiclo() + ": " + $pr.getDuracion() + " ms");
+end
+
+// Regla 10: Informar Complejo QRS anormal
+rule "Complejo QRS anormal"
+when
+    $qrs : ComplejoQRS( duracion > 120 )
+then
+    System.out.println("Complejo QRS ensanchado en ciclo " + $qrs.getCiclo() + ": " + $qrs.getDuracion() + " ms");
+end
+

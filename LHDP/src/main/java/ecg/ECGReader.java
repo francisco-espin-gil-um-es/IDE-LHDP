@@ -8,47 +8,64 @@ import java.util.regex.Pattern;
 
 public class ECGReader {
 
+    // Lee y construye ECGData con Ciclos y Ondas a partir de un archivo .ecg
     public ECGData leerECGDesdeArchivo(String archivo) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(archivo));
-        String linea;
-        StringBuilder voltajesString = new StringBuilder();
-        long timestamp = System.currentTimeMillis();  // Usamos el timestamp actual como ejemplo
+        try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
+            String linea;
+            ECGData ecgData = new ECGData(System.currentTimeMillis());
 
-        // Usaremos una expresión regular para extraer los valores dentro de los paréntesis
-        Pattern pattern = Pattern.compile("[A-Za-z]+\\(([^,]+),([^,]+),([^)]+)\\)");
+            Pattern pattern = Pattern.compile("^([PQRST])\\(([^,]+),([^,]+),([^)]+)\\)");
+            int numeroCiclo = 0;
+            Ciclo cicloActual = null;
 
-        while ((linea = reader.readLine()) != null) {
-            // Ignorar líneas que son comentarios o vacías
-            if (linea.trim().startsWith("#") || linea.trim().isEmpty()) {
-                continue;  // Si la línea es un comentario o está vacía, la ignoramos
-            }
+            while ((linea = reader.readLine()) != null) {
+                linea = linea.trim();
+                if (linea.isEmpty() || linea.startsWith("#")) {
+                    continue;
+                }
 
-            // Buscar los valores numéricos dentro de los paréntesis en cada línea
-            Matcher matcher = pattern.matcher(linea);
-            if (matcher.find()) {
-                // Extraemos los valores dentro de los paréntesis
-                try {
-                    double valor = Double.parseDouble(matcher.group(3));  // El valor está en el tercer grupo
-                    voltajesString.append(valor).append("\n");  // Guardamos el valor en voltajesString
-                } catch (NumberFormatException e) {
-                    System.out.println("Advertencia: Línea no válida para convertir a número: " + linea);
+                Matcher matcher = pattern.matcher(linea);
+                if (!matcher.find()) {
+                    System.out.println("Advertencia: Línea no reconocida: " + linea);
+                    continue;
+                }
+
+                char tipo = matcher.group(1).charAt(0);
+                double inicio = Double.parseDouble(matcher.group(2).trim());
+                double fin = Double.parseDouble(matcher.group(3).trim());
+                double pico = Double.parseDouble(matcher.group(4).trim());
+
+                switch (tipo) {
+                    case 'P':
+                        numeroCiclo++;
+                        cicloActual = new Ciclo(numeroCiclo);
+                        cicloActual.setOndaP(new OndaP(inicio, fin, pico, numeroCiclo));
+                        ecgData.addCiclo(cicloActual);
+                        break;
+                    case 'Q':
+                        if (cicloActual != null)
+                            cicloActual.setOndaQ(new OndaQ(inicio, fin, pico, numeroCiclo));
+                        break;
+                    case 'R':
+                        if (cicloActual != null)
+                            cicloActual.setOndaR(new OndaR(inicio, fin, pico, numeroCiclo));
+                        break;
+                    case 'S':
+                        if (cicloActual != null)
+                            cicloActual.setOndaS(new OndaS(inicio, fin, pico, numeroCiclo));
+                        break;
+                    case 'T':
+                        if (cicloActual != null)
+                            cicloActual.setOndaT(new OndaT(inicio, fin, pico, numeroCiclo));
+                        break;
+                    default:
+                        // no-op
                 }
             }
+
+            // NO calculamos la frecuencia cardíaca aquí (eso es inferencia, se hace en
+            // Drools)
+            return ecgData;
         }
-        reader.close();
-
-        // Convertir la cadena de voltajes a un array de double
-        String[] voltajesArray = voltajesString.toString().split("\n");
-        double[] voltajes = new double[voltajesArray.length];
-
-        for (int i = 0; i < voltajesArray.length; i++) {
-            try {
-                voltajes[i] = Double.parseDouble(voltajesArray[i].trim());  // Convertir a double
-            } catch (NumberFormatException e) {
-                System.out.println("Advertencia: No se pudo convertir la línea a un número válido: " + voltajesArray[i]);
-            }
-        }
-
-        return new ECGData(voltajes, timestamp);
     }
 }
