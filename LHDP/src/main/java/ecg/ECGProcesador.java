@@ -19,14 +19,29 @@ public class ECGProcesador {
         // Leer la ruta del archivo desde la consola
         Scanner scanner = new Scanner(System.in);
         System.out.print("Por favor, ingrese la ruta del archivo ECG: ");
-        String archivoRuta = scanner.nextLine();  // Lee la ruta completa del archivo
+        String archivoRuta = scanner.nextLine(); // Lee la ruta completa del archivo
 
         // Leer el archivo de ECG
         ECGLector ecgLector = new ECGLector();
         ECGData ecgData = ecgLector.leerECGDesdeArchivo(archivoRuta);
 
-        // Insertar el hecho (ECG) en la memoria de trabajo
+        // Insertar el ECGData
         kieSession.insert(ecgData);
+
+        // Insertar solo las ondas individuales (hechos básicos)
+        // NO insertamos los Ciclos porque son "contenedores"
+        for (Ciclo ciclo : ecgData.getCiclos()) {
+            if (ciclo.getOndaP() != null)
+                kieSession.insert(ciclo.getOndaP());
+            if (ciclo.getOndaQ() != null)
+                kieSession.insert(ciclo.getOndaQ());
+            if (ciclo.getOndaR() != null)
+                kieSession.insert(ciclo.getOndaR());
+            if (ciclo.getOndaS() != null)
+                kieSession.insert(ciclo.getOndaS());
+            if (ciclo.getOndaT() != null)
+                kieSession.insert(ciclo.getOndaT());
+        }
 
         // Ejecutar las reglas
         kieSession.fireAllRules();
@@ -34,9 +49,9 @@ public class ECGProcesador {
         // Finalizar la sesión
         kieSession.dispose();
 
-        scanner.close();  // Cerrar el scanner
+        scanner.close(); // Cerrar el scanner
     }
-    
+
     public static class ECGProcessor {
         // Método para calcular la frecuencia cardíaca
         public static double calcularFrecuenciaCardiaca(double[] voltajes) {
@@ -59,7 +74,7 @@ public class ECGProcesador {
         // Calcula el intervalo entre picos (simplificado)
         public static double calcularIntervalo(int picos) {
             // Este es un cálculo simple; en realidad se debe basar en el tiempo entre picos
-            return picos * 0.6;  // Este es solo un ejemplo, necesitas ajustar según tus datos
+            return picos * 0.6; // Este es solo un ejemplo, necesitas ajustar según tus datos
         }
     }
 
