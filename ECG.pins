@@ -1,0 +1,34 @@
+; Tue Nov 04 11:38:46 CET 2025
+; 
+;+ (version "3.4.8")
+;+ (build "Build 629")
+
+([ECG_Class0] of  %3APAL-CONSTRAINT
+
+	(%3APAL-NAME "CompInicioAntesFin")
+	(%3APAL-STATEMENT "(forall ?c\n        (=> (and (own-slot-not-null inicioMs ?c)\n                 (own-slot-not-null finMs ?c))\n            (< (inicioMs ?c) (finMs ?c))\n        )\n)\n\n(defrange ?c :FRAME ComponenteECG)\n"))
+
+([ECG_Class1] of  %3APAL-CONSTRAINT
+
+	(%3APAL-NAME "PicoDentroIntervalo")
+	(%3APAL-STATEMENT "(forall ?o\n        (=> (and (own-slot-not-null inicioMs ?o)\n                 (own-slot-not-null finMs ?o)\n                 (own-slot-not-null tiempoPicoMs ?o))\n            (and (>= (tiempoPicoMs ?o) (inicioMs ?o))\n                 (<= (tiempoPicoMs ?o) (finMs ?o)))\n        )\n)\n\n(defrange ?o :FRAME Onda)\n"))
+
+([ECG_Class14] of  %3APAL-CONSTRAINT
+
+	(%3APAL-NAME "CompInicioAntesFin")
+	(%3APAL-STATEMENT "(forall ?c\n        (=> (and (own-slot-not-null inicioMs ?c)\n                 (own-slot-not-null finMs ?c))\n            (< (inicioMs ?c) (finMs ?c))\n        )\n)\n\n(defrange ?c :FRAME ComponenteECG)\n"))
+
+([ECG_Class15] of  %3APAL-CONSTRAINT
+
+	(%3APAL-NAME "PicoDentroIntervalo")
+	(%3APAL-STATEMENT "(forall ?o\n        (=> (and (own-slot-not-null inicioMs ?o)\n                 (own-slot-not-null finMs ?o)\n                 (own-slot-not-null tiempoPicoMs ?o))\n            (and (>= (tiempoPicoMs ?o) (inicioMs ?o))\n                 (<= (tiempoPicoMs ?o) (finMs ?o)))\n        )\n)\n\n(defrange ?o :FRAME Onda)\n"))
+
+([ECG_Class16] of  %3APAL-CONSTRAINT
+
+	(%3APAL-NAME "UnicaOndaPorCiclo")
+	(%3APAL-STATEMENT "(forall ?p1\n        (forall ?p2\n                (=> (and (own-slot-not-null perteneceACiclo ?p1)\n                         (own-slot-not-null perteneceACiclo ?p2)\n                         (= (perteneceACiclo ?p1) (perteneceACiclo ?p2))\n                         (/= ?p1 ?p2))\n                    false\n                )\n        )\n)\n\n(defrange ?p1 :FRAME OndaP)\n(defrange ?p2 :FRAME OndaP)\n"))
+
+([ECG_Class2] of  %3APAL-CONSTRAINT
+
+	(%3APAL-NAME "UnicaOndaCiclo")
+	(%3APAL-STATEMENT "(forall ?p1\n        (forall ?p2\n                (=> (and (own-slot-not-null perteneceACiclo ?p1)\n                         (own-slot-not-null perteneceACiclo ?p2)\n                         (= (perteneceACiclo ?p1) (perteneceACiclo ?p2))\n                         (/= ?p1 ?p2))\n                    false\n                )\n        )\n)\n\n(defrange ?p1 :FRAME OndaP)\n(defrange ?p2 :FRAME OndaP)\n"))

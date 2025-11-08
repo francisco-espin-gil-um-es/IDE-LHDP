@@ -1,0 +1,317 @@
+; Tue Nov 04 11:38:46 CET 2025
+; 
+;+ (version "3.4.8")
+;+ (build "Build 629")
+
+
+(defclass %3ACLIPS_TOP_LEVEL_SLOT_CLASS "Fake class to save top-level slot information"
+	(is-a USER)
+	(role abstract)
+	(single-slot cicloRelacionado
+		(type INSTANCE)
+;+		(allowed-classes CicloCardiaco)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot perteneceACiclo
+;+		(comment "Ciclo cardiaco al que pertenece este componente.")
+		(type INSTANCE)
+;+		(allowed-classes CicloCardiaco)
+;+		(cardinality 0 1)
+;+		(inverse-slot tieneComponente)
+		(create-accessor read-write))
+	(single-slot indiceCiclo
+;+		(comment "Indice del ciclo dentro de un registro de ECG.")
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot idRegistro
+;+		(comment "Identificador del fichero .ecg o del registro")
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot inicioMs
+;+		(comment "Instante de inicio del componente")
+		(type INTEGER)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot duracionMs
+;+		(comment "Duración en milisegundos del componente")
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot tieneComponente
+		(type INSTANCE)
+;+		(allowed-classes ComponenteECG)
+;+		(inverse-slot perteneceACiclo)
+		(create-accessor read-write))
+	(single-slot texto
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot ECG_Class8
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot explicacionDiagnostico
+		(type INSTANCE)
+;+		(allowed-classes ExplicacionDiagnostico)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot inverse_of_perteneceACiclo
+		(type INSTANCE)
+;+		(allowed-classes ComponenteECG)
+		(create-accessor read-write))
+	(multislot tieneDiagnostico
+		(type INSTANCE)
+;+		(allowed-classes Diagnostico)
+;+		(inverse-slot seAsociaRegistro)
+		(create-accessor read-write))
+	(single-slot picoMv
+;+		(comment "Amplitud de la onda en miliVoltios.")
+		(type FLOAT)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot numCiclos
+;+		(comment "Numero de ciclos cardiacos presentes en el registro.")
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot perteneceARegistro
+		(type INSTANCE)
+;+		(allowed-classes ECGRegistro)
+;+		(cardinality 0 1)
+;+		(inverse-slot tieneCiclo)
+		(create-accessor read-write))
+	(single-slot patronEsperado
+;+		(comment "Etiqueta del patron esperado.")
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot seAsociaRegistro
+		(type INSTANCE)
+;+		(allowed-classes ECGRegistro)
+;+		(cardinality 0 1)
+;+		(inverse-slot tieneDiagnostico)
+		(create-accessor read-write))
+	(single-slot ritmoCardiaco
+;+		(comment "Frecuencia cardiaca en latidos por minuto.")
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot tieneCiclo
+		(type INSTANCE)
+;+		(allowed-classes CicloCardiaco)
+;+		(inverse-slot perteneceARegistro)
+		(create-accessor read-write))
+	(single-slot finMs
+;+		(comment "Instante de fin del componente")
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot descripcion
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass ECGRegistro "Registro de un ECG correspondiente a un paciente en una derivación. Contiene uno o varios ciclos cardiacos y diagnósticos asociados."
+	(is-a USER)
+	(role concrete)
+	(single-slot numCiclos
+;+		(comment "Numero de ciclos cardiacos presentes en el registro.")
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot patronEsperado
+;+		(comment "Etiqueta del patron esperado.")
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot ritmoCardiaco
+;+		(comment "Frecuencia cardiaca en latidos por minuto.")
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot tieneCiclo
+		(type INSTANCE)
+;+		(allowed-classes CicloCardiaco)
+		(create-accessor read-write))
+	(single-slot idRegistro
+;+		(comment "Identificador del fichero .ecg o del registro")
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(multislot tieneDiagnostico
+		(type INSTANCE)
+;+		(allowed-classes Diagnostico)
+		(create-accessor read-write)))
+
+(defclass CicloCardiaco "Representa un ciclo cardiaco compuesto por ondas y sus segmentos e intervalos."
+	(is-a USER)
+	(role concrete)
+	(multislot tieneComponente
+		(type INSTANCE)
+;+		(allowed-classes ComponenteECG)
+		(create-accessor read-write))
+	(single-slot indiceCiclo
+;+		(comment "Indice del ciclo dentro de un registro de ECG.")
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot perteneceARegistro
+		(type INSTANCE)
+;+		(allowed-classes ECGRegistro)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass ComponenteECG "Elemento morfologico del ECG con posicion temporal: ondas, segmentos, intervalos o complejos."
+	(is-a USER)
+	(role abstract)
+	(single-slot duracionMs
+;+		(comment "Duración en milisegundos del componente")
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot finMs
+;+		(comment "Instante de fin del componente")
+		(type INTEGER)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot perteneceACiclo
+;+		(comment "Ciclo cardiaco al que pertenece este componente.")
+		(type INSTANCE)
+;+		(allowed-classes CicloCardiaco)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot inicioMs
+;+		(comment "Instante de inicio del componente")
+		(type INTEGER)
+;+		(cardinality 1 1)
+		(create-accessor read-write)))
+
+(defclass Onda "Onda individual del ECG (P,Q,R,S o T)"
+	(is-a ComponenteECG)
+	(role abstract)
+	(single-slot picoMv
+;+		(comment "Amplitud de la onda en miliVoltios.")
+		(type FLOAT)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass OndaP
+	(is-a Onda)
+	(role concrete))
+
+(defclass OndaQ
+	(is-a Onda)
+	(role concrete))
+
+(defclass OndaR
+	(is-a Onda)
+	(role concrete))
+
+(defclass OndaS
+	(is-a Onda)
+	(role concrete))
+
+(defclass OndaT
+	(is-a Onda)
+	(role concrete))
+
+(defclass Segmento
+	(is-a ComponenteECG)
+	(role abstract))
+
+(defclass SegmentoPR
+	(is-a Segmento)
+	(role concrete))
+
+(defclass SegmentoST
+	(is-a Segmento)
+	(role concrete))
+
+(defclass Intervalo
+	(is-a ComponenteECG)
+	(role abstract))
+
+(defclass IntervaloPR
+	(is-a Intervalo)
+	(role concrete))
+
+(defclass IntervaloQT
+	(is-a Intervalo)
+	(role concrete))
+
+(defclass IntervaloRR
+	(is-a Intervalo)
+	(role concrete))
+
+(defclass Complejo
+	(is-a ComponenteECG)
+	(role abstract))
+
+(defclass ComplejoQRS
+	(is-a Complejo)
+	(role concrete))
+
+(defclass Diagnostico "Conclusión diagonostica derivada del análisis del ECG mediante las reglas del sistema experto."
+	(is-a USER)
+	(role abstract)
+	(single-slot seAsociaRegistro
+		(type INSTANCE)
+;+		(allowed-classes ECGRegistro)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot descripcion
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot explicacionDiagnostico
+		(type INSTANCE)
+;+		(allowed-classes ExplicacionDiagnostico)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
+
+(defclass TaquicardiaSinusal
+	(is-a Diagnostico)
+	(role concrete))
+
+(defclass BraquicardiaSinusal
+	(is-a Diagnostico)
+	(role concrete))
+
+(defclass Hipocalcemia
+	(is-a Diagnostico)
+	(role concrete))
+
+(defclass Hipopotasemia
+	(is-a Diagnostico)
+	(role concrete))
+
+(defclass ContraccionVentricularPrematura
+	(is-a Diagnostico)
+	(role concrete))
+
+(defclass IsquemiaCoronaria
+	(is-a Diagnostico)
+	(role concrete))
+
+(defclass InfartoAgudoDeMiocardio
+	(is-a Diagnostico)
+	(role concrete))
+
+(defclass ExplicacionDiagnostico "Texto explicativo que justifica un diagnóstico."
+	(is-a USER)
+	(role concrete)
+	(single-slot cicloRelacionado
+		(type INSTANCE)
+;+		(allowed-classes CicloCardiaco)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot ECG_Class8
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot texto
+		(type STRING)
+;+		(cardinality 0 1)
+		(create-accessor read-write)))
