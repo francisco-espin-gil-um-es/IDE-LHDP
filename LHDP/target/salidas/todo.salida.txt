@@ -1,0 +1,47 @@
+=== RESUMEN DE TODOS LOS FICHEROS PROCESADOS ===
+
+Fichero: bradicardia.ecg
+Diagnóstico: Bradicardia
+
+Fichero: bradicardia2.ecg
+Diagnóstico: Bradicardia
+
+Fichero: hipocalcemia.ecg
+Diagnóstico: Normal
+
+Fichero: hipocalcemia_hipopotasemia.ecg
+Diagnóstico: Normal
+
+Fichero: hipocalcemia_iam.ecg
+Diagnóstico: Normal
+
+Fichero: hipocalcemia_isqcoronaria.ecg
+Diagnóstico: Normal
+
+Fichero: hipopotasemia.ecg
+Diagnóstico: Normal
+
+Fichero: iam.ecg
+Diagnóstico: Normal
+
+Fichero: isq-coronaria.ecg
+Diagnóstico: Normal
+
+Fichero: normal.ecg
+Diagnóstico: Normal
+
+Fichero: normal2.ecg
+Diagnóstico: Normal
+
+Fichero: premat-vent-contr1.ecg
+Diagnóstico: Normal
+
+Fichero: premat-vent-contr2.ecg
+Diagnóstico: Normal
+
+Fichero: taquicardia.ecg
+Diagnóstico: Taquicardia
+
+Fichero: taquicardia2.ecg
+Diagnóstico: Taquicardia
+

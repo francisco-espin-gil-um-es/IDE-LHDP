@@ -13,6 +13,7 @@ import ecg.ComplejoQRS;
 import ecg.IntervaloQT;
 import ecg.IntervaloRR;
 import ecg.FrecuenciaCardiaca;
+import ecg.Diagnostico;
 
 // Regla 1: Detectar Intervalo PR
 // Cuando hay una P y una Q del mismo ciclo, crear el intervalo PR
@@ -92,7 +93,9 @@ end
 rule "Taquicardia"
 when
     FrecuenciaCardiaca( valor > 100 )
+    not( Diagnostico( patologia == "Taquicardia" ) )
 then
+    insert( new Diagnostico("Taquicardia") );
     System.out.println("¡ALERTA: Taquicardia detectada!");
 end
 
@@ -100,7 +103,9 @@ end
 rule "Bradicardia"
 when
     FrecuenciaCardiaca( valor > 0, valor < 60 )
+    not( Diagnostico( patologia == "Bradicardia" ) )
 then
+    insert( new Diagnostico("Bradicardia") );
     System.out.println("¡ALERTA: Bradicardia detectada!");
 end
 
@@ -118,5 +123,15 @@ when
     $qrs : ComplejoQRS( duracion > 120 )
 then
     System.out.println("Complejo QRS ensanchado en ciclo " + $qrs.getCiclo() + ": " + $qrs.getDuracion() + " ms");
+end
+
+// Regla 11: ECG Normal (si no hay patologías detectadas)
+rule "ECG Normal"
+when
+    FrecuenciaCardiaca( valor >= 60, valor <= 100 )
+    not( Diagnostico() )
+then
+    insert( new Diagnostico("Normal") );
+    System.out.println("ECG Normal - Sin patologías detectadas");
 end
 
