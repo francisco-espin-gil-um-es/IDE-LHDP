@@ -1,0 +1,64 @@
+Intervalo PR detectado en ciclo 19
+Intervalo PR detectado en ciclo 18
+Intervalo PR detectado en ciclo 17
+Intervalo PR detectado en ciclo 16
+Intervalo PR detectado en ciclo 15
+Intervalo PR detectado en ciclo 14
+Intervalo PR detectado en ciclo 13
+Intervalo PR detectado en ciclo 12
+Intervalo PR detectado en ciclo 11
+Intervalo PR detectado en ciclo 10
+Intervalo PR detectado en ciclo 9
+Intervalo PR detectado en ciclo 8
+Intervalo PR detectado en ciclo 7
+Intervalo PR detectado en ciclo 6
+Intervalo PR detectado en ciclo 5
+Intervalo PR detectado en ciclo 4
+Intervalo PR detectado en ciclo 3
+Intervalo PR detectado en ciclo 2
+Intervalo PR detectado en ciclo 1
+Complejo QRS detectado en ciclo 19
+Complejo QRS detectado en ciclo 18
+Complejo QRS detectado en ciclo 17
+Complejo QRS detectado en ciclo 16
+Complejo QRS detectado en ciclo 15
+Complejo QRS detectado en ciclo 14
+Complejo QRS detectado en ciclo 13
+Complejo QRS detectado en ciclo 12
+Complejo QRS detectado en ciclo 11
+Complejo QRS detectado en ciclo 10
+Complejo QRS detectado en ciclo 9
+Complejo QRS detectado en ciclo 8
+Complejo QRS detectado en ciclo 7
+Complejo QRS detectado en ciclo 6
+Complejo QRS detectado en ciclo 5
+Complejo QRS detectado en ciclo 4
+Complejo QRS detectado en ciclo 3
+Complejo QRS detectado en ciclo 2
+Complejo QRS detectado en ciclo 1
+Intervalo QT detectado en ciclo 18
+Intervalo QT detectado en ciclo 17
+Intervalo QT detectado en ciclo 16
+Intervalo QT detectado en ciclo 15
+Intervalo QT detectado en ciclo 14
+Intervalo QT detectado en ciclo 13
+Intervalo QT detectado en ciclo 12
+Intervalo QT detectado en ciclo 11
+Intervalo QT detectado en ciclo 10
+Intervalo QT detectado en ciclo 9
+Intervalo QT detectado en ciclo 8
+Intervalo QT detectado en ciclo 7
+Intervalo QT detectado en ciclo 6
+Intervalo QT detectado en ciclo 5
+Intervalo QT detectado en ciclo 4
+Intervalo QT detectado en ciclo 3
+Intervalo QT detectado en ciclo 2
+Intervalo QT detectado en ciclo 1
+Frecuencia cardiaca: 91.78743961352656 pul/min (19 ciclos)
+¡ALERTA: Hipopotasemia detectada en ciclo 1
+
+--- Resumen ---
+Fichero: hipopotasemia.ecg
+Ciclos detectados: 19
+Frecuencia cardiaca: 91,79 pul/min
+Diagnóstico: Hipopotasemia

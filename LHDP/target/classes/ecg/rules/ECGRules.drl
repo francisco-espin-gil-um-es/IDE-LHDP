@@ -13,6 +13,7 @@ import ecg.ComplejoQRS;
 import ecg.IntervaloQT;
 import ecg.IntervaloRR;
 import ecg.FrecuenciaCardiaca;
+import ecg.Diagnostico;
 
 // Regla 1: Detectar Intervalo PR
 // Cuando hay una P y una Q del mismo ciclo, crear el intervalo PR
@@ -92,7 +93,9 @@ end
 rule "Taquicardia"
 when
     FrecuenciaCardiaca( valor > 100 )
+    not( Diagnostico( patologia == "Taquicardia" ) )
 then
+    insert( new Diagnostico("Taquicardia") );
     System.out.println("¡ALERTA: Taquicardia detectada!");
 end
 
@@ -100,7 +103,9 @@ end
 rule "Bradicardia"
 when
     FrecuenciaCardiaca( valor > 0, valor < 60 )
+    not( Diagnostico( patologia == "Bradicardia" ) )
 then
+    insert( new Diagnostico("Bradicardia") );
     System.out.println("¡ALERTA: Bradicardia detectada!");
 end
 
@@ -118,5 +123,65 @@ when
     $qrs : ComplejoQRS( duracion > 120 )
 then
     System.out.println("Complejo QRS ensanchado en ciclo " + $qrs.getCiclo() + ": " + $qrs.getDuracion() + " ms");
+end
+
+// Regla 11: Detectar Hipocalcemia (QT prolongado >440ms)
+rule "Hipocalcemia"
+when
+    $qt : IntervaloQT( duracion > 440 )
+    not( Diagnostico( patologia == "Hipocalcemia" ) )
+then
+    insert( new Diagnostico("Hipocalcemia", "QT prolongado: " + $qt.getDuracion() + " ms") );
+    System.out.println("¡ALERTA: Hipocalcemia detectada en ciclo " + $qt.getCiclo());
+end
+
+// Regla 12: Detectar Hipopotasemia (onda T muy negativa)
+rule "Hipopotasemia"
+when
+    $t : OndaT( pico < -10 )
+    not( Diagnostico( patologia == "Hipopotasemia" ) )
+then
+    insert( new Diagnostico("Hipopotasemia", "Onda T negativa: " + $t.getPico()) );
+    System.out.println("¡ALERTA: Hipopotasemia detectada en ciclo " + $t.getCiclo());
+end
+
+// Regla 13: Detectar IAM - Infarto Agudo de Miocardio (onda T muy elevada >10)
+rule "Infarto Agudo de Miocardio"
+when
+    $t : OndaT( pico > 10 )
+    not( Diagnostico( patologia == "Infarto Agudo de Miocardio" ) )
+then
+    insert( new Diagnostico("Infarto Agudo de Miocardio", "Onda T elevada: " + $t.getPico()) );
+    System.out.println("¡ALERTA: Infarto Agudo de Miocardio (IAM) detectado en ciclo " + $t.getCiclo());
+end
+
+// Regla 14: Detectar Isquemia Coronaria (onda T negativa entre -9 y -10)
+rule "Isquemia Coronaria"
+when
+    $t : OndaT( pico < -9, pico >= -10 )
+    not( Diagnostico( patologia == "Isquemia Coronaria" ) )
+then
+    insert( new Diagnostico("Isquemia Coronaria", "Onda T negativa: " + $t.getPico()) );
+    System.out.println("¡ALERTA: Isquemia Coronaria detectada en ciclo " + $t.getCiclo());
+end
+
+// Regla 15: Detectar Contracción Ventricular Prematura (QRS muy corto <30ms)
+rule "Contracción Ventricular Prematura"
+when
+    $qrs : ComplejoQRS( duracion < 30 )
+    not( Diagnostico( patologia == "Contracción Ventricular Prematura" ) )
+then
+    insert( new Diagnostico("Contracción Ventricular Prematura", "QRS corto: " + $qrs.getDuracion() + " ms") );
+    System.out.println("¡ALERTA: Contracción Ventricular Prematura detectada en ciclo " + $qrs.getCiclo());
+end
+
+// Regla 16: ECG Normal (si no hay patologías detectadas)
+rule "ECG Normal"
+when
+    FrecuenciaCardiaca( valor >= 60, valor <= 100 )
+    not( Diagnostico() )
+then
+    insert( new Diagnostico("Normal") );
+    System.out.println("ECG Normal - Sin patologías detectadas");
 end
 
