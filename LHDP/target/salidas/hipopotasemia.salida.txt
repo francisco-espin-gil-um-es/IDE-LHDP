@@ -56,9 +56,24 @@ Intervalo QT detectado en ciclo 2
 Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 91.78743961352656 pul/min (19 ciclos)
 ¡ALERTA: Hipopotasemia detectada en ciclo 1
+Severidad Hipopotasemia: 0,25
 
---- Resumen ---
+==========================================================
+--- RESUMEN CLÍNICO ---
+==========================================================
 Fichero: hipopotasemia.ecg
 Ciclos detectados: 19
 Frecuencia cardiaca: 91,79 pul/min
 Diagnóstico: Hipopotasemia
+
+--- SEVERIDAD DE PATOLOGÍAS (Análisis Difuso) ---
+  - Hipopotasemia: 0,25 (Leve)
+
+--- EVALUACIÓN DE RIESGO GLOBAL (JFuzzyLogic) ---
+Riesgo Global: 15% - BAJO
+Patología única detectada: Hipopotasemia
+
+--- RECOMENDACIONES MÉDICAS ---
+[PREVENTIVA] Control médico rutinario - Seguimiento preventivo
+[PRIORITARIA] Control de electrolitos - Análisis de sangre recomendado
+==========================================================

@@ -54,8 +54,11 @@ Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 97.73755656108598 pul/min (18 ciclos)
 ECG Normal - Sin patologías detectadas
 
---- Resumen ---
+==========================================================
+--- RESUMEN CLÍNICO ---
+==========================================================
 Fichero: premat-vent-contr1.ecg
 Ciclos detectados: 18
 Frecuencia cardiaca: 97,74 pul/min
 Diagnóstico: Normal
+==========================================================

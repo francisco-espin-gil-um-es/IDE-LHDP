@@ -201,8 +201,11 @@ Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 88.27404479578394 pul/min (67 ciclos)
 ECG Normal - Sin patologías detectadas
 
---- Resumen ---
+==========================================================
+--- RESUMEN CLÍNICO ---
+==========================================================
 Fichero: normal2.ecg
 Ciclos detectados: 67
 Frecuencia cardiaca: 88,27 pul/min
 Diagnóstico: Normal
+==========================================================

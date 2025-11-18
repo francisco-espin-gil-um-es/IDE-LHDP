@@ -1,0 +1,149 @@
+// ========================================================================
+// Sistema de Evaluación Difusa de Riesgo Cardiológico
+// Basado en severidad de patologías detectadas
+// ========================================================================
+
+FUNCTION_BLOCK evaluacion_riesgo
+
+// Variables de entrada: severidad de cada patología (0.0 - 1.0)
+VAR_INPUT
+    severidad_taquicardia : REAL;
+    severidad_bradicardia : REAL;
+    severidad_iam : REAL;
+    severidad_isquemia : REAL;
+    severidad_hipocalcemia : REAL;
+    severidad_hipopotasemia : REAL;
+    num_patologias : REAL; // Comorbilidad: número de patologías detectadas
+END_VAR
+
+// Variable de salida: riesgo global del paciente
+VAR_OUTPUT
+    riesgo_global : REAL;
+END_VAR
+
+// ========================================================================
+// CONJUNTOS DIFUSOS - Severidad de entrada
+// ========================================================================
+FUZZIFY severidad_taquicardia
+    TERM ninguna := (0, 1) (0.1, 0);
+    TERM leve := (0, 0) (0.2, 1) (0.4, 0);
+    TERM moderada := (0.3, 0) (0.5, 1) (0.7, 0);
+    TERM severa := (0.6, 0) (0.85, 1) (1, 1);
+END_FUZZIFY
+
+FUZZIFY severidad_bradicardia
+    TERM ninguna := (0, 1) (0.1, 0);
+    TERM leve := (0, 0) (0.2, 1) (0.4, 0);
+    TERM moderada := (0.3, 0) (0.5, 1) (0.7, 0);
+    TERM severa := (0.6, 0) (0.85, 1) (1, 1);
+END_FUZZIFY
+
+FUZZIFY severidad_iam
+    TERM ninguna := (0, 1) (0.1, 0);
+    TERM leve := (0, 0) (0.3, 1) (0.5, 0);
+    TERM moderada := (0.4, 0) (0.6, 1) (0.8, 0);
+    TERM severa := (0.7, 0) (0.9, 1) (1, 1);
+END_FUZZIFY
+
+FUZZIFY severidad_isquemia
+    TERM ninguna := (0, 1) (0.1, 0);
+    TERM leve := (0, 0) (0.25, 1) (0.5, 0);
+    TERM moderada := (0.4, 0) (0.6, 1) (0.8, 0);
+    TERM severa := (0.7, 0) (0.9, 1) (1, 1);
+END_FUZZIFY
+
+FUZZIFY severidad_hipocalcemia
+    TERM ninguna := (0, 1) (0.1, 0);
+    TERM leve := (0, 0) (0.3, 1) (0.5, 0);
+    TERM moderada := (0.4, 0) (0.6, 1) (0.75, 0);
+    TERM severa := (0.65, 0) (0.85, 1) (1, 1);
+END_FUZZIFY
+
+FUZZIFY severidad_hipopotasemia
+    TERM ninguna := (0, 1) (0.1, 0);
+    TERM leve := (0, 0) (0.3, 1) (0.5, 0);
+    TERM moderada := (0.4, 0) (0.6, 1) (0.75, 0);
+    TERM severa := (0.65, 0) (0.85, 1) (1, 1);
+END_FUZZIFY
+
+FUZZIFY num_patologias
+    TERM ninguna := (0, 1) (0.5, 0);
+    TERM unica := (0, 0) (1, 1) (1.5, 0);
+    TERM multiple := (1.5, 0) (2, 1) (3, 1) (4, 0);
+    TERM comorbilidad_alta := (3, 0) (4, 1) (7, 1);
+END_FUZZIFY
+
+// ========================================================================
+// CONJUNTOS DIFUSOS - Riesgo global de salida
+// ========================================================================
+DEFUZZIFY riesgo_global
+    TERM bajo := (0, 1) (0.2, 1) (0.35, 0);
+    TERM medio := (0.25, 0) (0.4, 1) (0.6, 1) (0.75, 0);
+    TERM alto := (0.65, 0) (0.8, 1) (0.9, 0);
+    TERM critico := (0.85, 0) (0.95, 1) (1, 1);
+    
+    METHOD : COG; // Center of Gravity
+    DEFAULT := 0;
+END_DEFUZZIFY
+
+// ========================================================================
+// REGLAS DIFUSAS DE INFERENCIA
+// ========================================================================
+RULEBLOCK evaluacion
+    AND : MIN;
+    ACT : MIN;
+    ACCU : MAX;
+
+    // --- Reglas para IAM (máxima prioridad) ---
+    RULE 1 : IF severidad_iam IS severa THEN riesgo_global IS critico;
+    RULE 2 : IF severidad_iam IS moderada THEN riesgo_global IS alto;
+    RULE 3 : IF severidad_iam IS leve THEN riesgo_global IS medio;
+
+    // --- Reglas para Isquemia Coronaria ---
+    RULE 4 : IF severidad_isquemia IS severa THEN riesgo_global IS alto;
+    RULE 5 : IF severidad_isquemia IS moderada THEN riesgo_global IS medio;
+
+    // --- Reglas de Comorbilidad (IAM + Isquemia) ---
+    RULE 6 : IF severidad_iam IS moderada AND severidad_isquemia IS moderada 
+             THEN riesgo_global IS critico;
+    RULE 7 : IF severidad_iam IS leve AND severidad_isquemia IS moderada 
+             THEN riesgo_global IS alto;
+
+    // --- Reglas para Alteraciones Electrolíticas + Patología Cardiaca ---
+    RULE 8 : IF severidad_iam IS moderada AND severidad_hipocalcemia IS moderada 
+             THEN riesgo_global IS critico;
+    RULE 9 : IF severidad_iam IS leve AND severidad_hipopotasemia IS moderada 
+             THEN riesgo_global IS alto;
+    RULE 10 : IF severidad_isquemia IS moderada AND severidad_hipocalcemia IS moderada 
+              THEN riesgo_global IS alto;
+
+    // --- Reglas para Taquicardia ---
+    RULE 11 : IF severidad_taquicardia IS severa THEN riesgo_global IS alto;
+    RULE 12 : IF severidad_taquicardia IS moderada THEN riesgo_global IS medio;
+    RULE 13 : IF severidad_taquicardia IS severa AND severidad_isquemia IS moderada 
+              THEN riesgo_global IS critico;
+
+    // --- Reglas para Bradicardia ---
+    RULE 14 : IF severidad_bradicardia IS severa THEN riesgo_global IS alto;
+    RULE 15 : IF severidad_bradicardia IS moderada THEN riesgo_global IS medio;
+
+    // --- Reglas de Comorbilidad Alta (múltiples patologías) ---
+    RULE 16 : IF num_patologias IS comorbilidad_alta THEN riesgo_global IS critico;
+    RULE 17 : IF num_patologias IS multiple AND severidad_iam IS moderada 
+              THEN riesgo_global IS critico;
+    RULE 18 : IF num_patologias IS multiple AND severidad_isquemia IS moderada 
+              THEN riesgo_global IS alto;
+
+    // --- Reglas de Riesgo Bajo ---
+    RULE 19 : IF severidad_taquicardia IS leve AND num_patologias IS unica 
+              THEN riesgo_global IS bajo;
+    RULE 20 : IF severidad_bradicardia IS leve AND num_patologias IS unica 
+              THEN riesgo_global IS bajo;
+    RULE 21 : IF severidad_hipocalcemia IS leve AND num_patologias IS unica 
+              THEN riesgo_global IS bajo;
+    RULE 22 : IF severidad_hipopotasemia IS leve AND num_patologias IS unica 
+              THEN riesgo_global IS bajo;
+
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK

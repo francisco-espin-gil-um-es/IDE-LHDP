@@ -242,9 +242,23 @@ Intervalo QT detectado en ciclo 2
 Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 45.33582089552239 pul/min (81 ciclos)
 ¡ALERTA: Bradicardia detectada!
+Severidad Bradicardia: 0,37
 
---- Resumen ---
+==========================================================
+--- RESUMEN CLÍNICO ---
+==========================================================
 Fichero: bradicardia2.ecg
 Ciclos detectados: 81
 Frecuencia cardiaca: 45,34 pul/min
 Diagnóstico: Bradicardia
+
+--- SEVERIDAD DE PATOLOGÍAS (Análisis Difuso) ---
+  - Bradicardia: 0,37 (Leve)
+
+--- EVALUACIÓN DE RIESGO GLOBAL (JFuzzyLogic) ---
+Riesgo Global: 42% - MEDIO
+Patología única detectada: Bradicardia
+
+--- RECOMENDACIONES MÉDICAS ---
+[SEGUIMIENTO] Consulta con cardiólogo en los próximos 7 días
+==========================================================

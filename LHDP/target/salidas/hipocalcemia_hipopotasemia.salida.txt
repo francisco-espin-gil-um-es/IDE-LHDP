@@ -51,10 +51,28 @@ Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 91.3978494623656 pul/min (17 ciclos)
 Complejo QRS ensanchado en ciclo 6: 230.0 ms
 ¡ALERTA: Hipocalcemia detectada en ciclo 6
+Severidad Hipocalcemia: 0,80
 ¡ALERTA: Hipopotasemia detectada en ciclo 6
+Severidad Hipopotasemia: 0,25
 
---- Resumen ---
+==========================================================
+--- RESUMEN CLÍNICO ---
+==========================================================
 Fichero: hipocalcemia_hipopotasemia.ecg
 Ciclos detectados: 17
 Frecuencia cardiaca: 91,40 pul/min
-Diagnóstico: Hipocalcemia, Hipopotasemia
+Diagnóstico: Hipopotasemia, Hipocalcemia
+
+--- SEVERIDAD DE PATOLOGÍAS (Análisis Difuso) ---
+  - Hipopotasemia: 0,25 (Leve)
+  - Hipocalcemia: 0,80 (Severo)
+
+--- EVALUACIÓN DE RIESGO GLOBAL (JFuzzyLogic) ---
+Riesgo Global: 0% - BAJO
+Comorbilidad: 2 patologías detectadas
+
+--- RECOMENDACIONES MÉDICAS ---
+[PREVENTIVA] Control médico rutinario - Seguimiento preventivo
+[PRIORITARIA] Control de electrolitos - Análisis de sangre recomendado
+[PRIORITARIA] Control de electrolitos - Análisis de sangre recomendado
+==========================================================

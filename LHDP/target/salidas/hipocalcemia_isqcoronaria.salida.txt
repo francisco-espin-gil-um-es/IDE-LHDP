@@ -54,10 +54,28 @@ Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 91.13924050632912 pul/min (18 ciclos)
 Complejo QRS ensanchado en ciclo 4: 230.0 ms
 ¡ALERTA: Hipocalcemia detectada en ciclo 4
+Severidad Hipocalcemia: 0,80
 ¡ALERTA: Isquemia Coronaria detectada en ciclo 4
+Severidad Isquemia: 1,00
 
---- Resumen ---
+==========================================================
+--- RESUMEN CLÍNICO ---
+==========================================================
 Fichero: hipocalcemia_isqcoronaria.ecg
 Ciclos detectados: 18
 Frecuencia cardiaca: 91,14 pul/min
-Diagnóstico: Hipocalcemia, Isquemia Coronaria
+Diagnóstico: Isquemia Coronaria, Hipocalcemia
+
+--- SEVERIDAD DE PATOLOGÍAS (Análisis Difuso) ---
+  - Isquemia Coronaria: 1,00 (Severo)
+  - Hipocalcemia: 0,80 (Severo)
+
+--- EVALUACIÓN DE RIESGO GLOBAL (JFuzzyLogic) ---
+Riesgo Global: 78% - ALTO
+Comorbilidad: 2 patologías detectadas
+
+--- RECOMENDACIONES MÉDICAS ---
+[PRIORITARIA] Evaluación cardiológica urgente en menos de 24 horas
+[PRIORITARIA] Riesgo de progresión a IAM - Pruebas de esfuerzo recomendadas
+[PRIORITARIA] Control de electrolitos - Análisis de sangre recomendado
+==========================================================

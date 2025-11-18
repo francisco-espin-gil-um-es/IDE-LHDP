@@ -47,9 +47,23 @@ Intervalo QT detectado en ciclo 2
 Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 92.7536231884058 pul/min (16 ciclos)
 ¡ALERTA: Infarto Agudo de Miocardio (IAM) detectado en ciclo 1
+Severidad IAM: 0,00
 
---- Resumen ---
+==========================================================
+--- RESUMEN CLÍNICO ---
+==========================================================
 Fichero: iam.ecg
 Ciclos detectados: 16
 Frecuencia cardiaca: 92,75 pul/min
 Diagnóstico: Infarto Agudo de Miocardio
+
+--- SEVERIDAD DE PATOLOGÍAS (Análisis Difuso) ---
+  - Infarto Agudo de Miocardio: 0,00 (Leve)
+
+--- EVALUACIÓN DE RIESGO GLOBAL (JFuzzyLogic) ---
+Riesgo Global: 50% - MEDIO
+Patología única detectada: Infarto Agudo de Miocardio
+
+--- RECOMENDACIONES MÉDICAS ---
+[SEGUIMIENTO] Consulta con cardiólogo en los próximos 7 días
+==========================================================

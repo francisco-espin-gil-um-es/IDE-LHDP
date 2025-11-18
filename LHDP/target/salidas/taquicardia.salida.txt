@@ -44,6 +44,7 @@ Intervalo QT detectado en ciclo 2
 Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 149.5016611295681 pul/min (15 ciclos)
 ¡ALERTA: Taquicardia detectada!
+Severidad Taquicardia: 0,83
 Intervalo PR anormal en ciclo 15: 25.0 ms
 Intervalo PR anormal en ciclo 14: 25.0 ms
 Intervalo PR anormal en ciclo 13: 25.0 ms
@@ -60,8 +61,21 @@ Intervalo PR anormal en ciclo 3: 25.0 ms
 Intervalo PR anormal en ciclo 2: 25.0 ms
 Intervalo PR anormal en ciclo 1: 25.0 ms
 
---- Resumen ---
+==========================================================
+--- RESUMEN CLÍNICO ---
+==========================================================
 Fichero: taquicardia.ecg
 Ciclos detectados: 15
 Frecuencia cardiaca: 149,50 pul/min
 Diagnóstico: Taquicardia
+
+--- SEVERIDAD DE PATOLOGÍAS (Análisis Difuso) ---
+  - Taquicardia: 0,83 (Severo)
+
+--- EVALUACIÓN DE RIESGO GLOBAL (JFuzzyLogic) ---
+Riesgo Global: 78% - ALTO
+Patología única detectada: Taquicardia
+
+--- RECOMENDACIONES MÉDICAS ---
+[PRIORITARIA] Evaluación cardiológica urgente en menos de 24 horas
+==========================================================

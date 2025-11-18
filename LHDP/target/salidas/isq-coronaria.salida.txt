@@ -47,9 +47,24 @@ Intervalo QT detectado en ciclo 2
 Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 92.7536231884058 pul/min (16 ciclos)
 ¡ALERTA: Isquemia Coronaria detectada en ciclo 1
+Severidad Isquemia: 1,00
 
---- Resumen ---
+==========================================================
+--- RESUMEN CLÍNICO ---
+==========================================================
 Fichero: isq-coronaria.ecg
 Ciclos detectados: 16
 Frecuencia cardiaca: 92,75 pul/min
 Diagnóstico: Isquemia Coronaria
+
+--- SEVERIDAD DE PATOLOGÍAS (Análisis Difuso) ---
+  - Isquemia Coronaria: 1,00 (Severo)
+
+--- EVALUACIÓN DE RIESGO GLOBAL (JFuzzyLogic) ---
+Riesgo Global: 78% - ALTO
+Patología única detectada: Isquemia Coronaria
+
+--- RECOMENDACIONES MÉDICAS ---
+[PRIORITARIA] Evaluación cardiológica urgente en menos de 24 horas
+[PRIORITARIA] Riesgo de progresión a IAM - Pruebas de esfuerzo recomendadas
+==========================================================

@@ -48,10 +48,27 @@ Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 92.3076923076923 pul/min (16 ciclos)
 Complejo QRS ensanchado en ciclo 1: 230.0 ms
 ¡ALERTA: Hipocalcemia detectada en ciclo 1
+Severidad Hipocalcemia: 0,80
 ¡ALERTA: Infarto Agudo de Miocardio (IAM) detectado en ciclo 1
+Severidad IAM: 0,00
 
---- Resumen ---
+==========================================================
+--- RESUMEN CLÍNICO ---
+==========================================================
 Fichero: hipocalcemia_iam.ecg
 Ciclos detectados: 16
 Frecuencia cardiaca: 92,31 pul/min
 Diagnóstico: Hipocalcemia, Infarto Agudo de Miocardio
+
+--- SEVERIDAD DE PATOLOGÍAS (Análisis Difuso) ---
+  - Hipocalcemia: 0,80 (Severo)
+  - Infarto Agudo de Miocardio: 0,00 (Leve)
+
+--- EVALUACIÓN DE RIESGO GLOBAL (JFuzzyLogic) ---
+Riesgo Global: 50% - MEDIO
+Comorbilidad: 2 patologías detectadas
+
+--- RECOMENDACIONES MÉDICAS ---
+[SEGUIMIENTO] Consulta con cardiólogo en los próximos 7 días
+[PRIORITARIA] Control de electrolitos - Análisis de sangre recomendado
+==========================================================

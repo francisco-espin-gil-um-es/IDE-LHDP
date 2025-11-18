@@ -106,32 +106,82 @@ public class ECGProcesador {
                     System.setOut(originalOut);
                 }
 
-                // Recuperar diagnósticos insertados por las reglas (NO calculamos en Java)
+                // Recuperar diagnósticos y severidades insertados por las reglas
                 Collection<?> objects = kieSession.getObjects();
                 StringBuilder diagnosticos = new StringBuilder();
+                java.util.List<SeveridadFuzzy> severidadesList = new java.util.ArrayList<>();
+
                 for (Object obj : objects) {
                     if (obj instanceof Diagnostico) {
                         if (diagnosticos.length() > 0) {
                             diagnosticos.append(", ");
                         }
                         diagnosticos.append(((Diagnostico) obj).getPatologia());
+                    } else if (obj instanceof SeveridadFuzzy) {
+                        severidadesList.add((SeveridadFuzzy) obj);
                     }
                 }
                 String diagnosticoTexto = diagnosticos.length() > 0 ? diagnosticos.toString() : "Sin diagnóstico";
 
+                // FASE 3: Evaluación fuzzy con JFuzzyLogic
+                RiesgoGlobal riesgoGlobal = null;
+                Recomendacion[] recomendaciones = null;
+
+                if (!severidadesList.isEmpty()) {
+                    try {
+                        EvaluadorRiesgoFuzzy evaluador = new EvaluadorRiesgoFuzzy();
+                        riesgoGlobal = evaluador.evaluarRiesgo(severidadesList);
+                        if (riesgoGlobal != null) {
+                            recomendaciones = evaluador.generarRecomendaciones(riesgoGlobal, severidadesList);
+                        }
+                    } catch (Exception e) {
+                        System.err.println("Error en evaluación fuzzy: " + e.getMessage());
+                    }
+                }
+
                 // Añadir resumen al final del fichero individual
                 try (PrintWriter pw = new PrintWriter(new FileWriter(outFile, true))) {
                     pw.println();
-                    pw.println("--- Resumen ---");
+                    pw.println("==========================================================");
+                    pw.println("--- RESUMEN CLÍNICO ---");
+                    pw.println("==========================================================");
                     pw.println("Fichero: " + ecgFile.getName());
                     pw.println("Ciclos detectados: " + ecgData.getNumeroCiclos());
                     pw.printf("Frecuencia cardiaca: %.2f pul/min%n", ecgData.getFrecuenciaCardiaca());
                     pw.println("Diagnóstico: " + diagnosticoTexto);
+
+                    // FASE 3: Información difusa si está disponible
+                    if (!severidadesList.isEmpty()) {
+                        pw.println();
+                        pw.println("--- SEVERIDAD DE PATOLOGÍAS (Análisis Difuso) ---");
+                        for (SeveridadFuzzy sev : severidadesList) {
+                            pw.printf("  - %s: %.2f (%s)%n",
+                                    sev.getPatologia(), sev.getSeveridad(), sev.getNivel());
+                        }
+                    }
+
+                    if (riesgoGlobal != null) {
+                        pw.println();
+                        pw.println("--- EVALUACIÓN DE RIESGO GLOBAL (JFuzzyLogic) ---");
+                        pw.println(riesgoGlobal.toString());
+                    }
+
+                    if (recomendaciones != null && recomendaciones.length > 0) {
+                        pw.println();
+                        pw.println("--- RECOMENDACIONES MÉDICAS ---");
+                        for (Recomendacion rec : recomendaciones) {
+                            pw.println(rec.toString());
+                        }
+                    }
+                    pw.println("==========================================================");
                 }
 
                 // Añadir al consolidado todo.salida.txt
                 todoSalida.append("Fichero: ").append(ecgFile.getName()).append("\n");
                 todoSalida.append("Diagnóstico: ").append(diagnosticoTexto).append("\n");
+                if (riesgoGlobal != null) {
+                    todoSalida.append("Riesgo: ").append(riesgoGlobal.getNivelRiesgo()).append("\n");
+                }
                 todoSalida.append("\n");
 
                 System.out.println("Procesado: " + ecgFile.getName() +

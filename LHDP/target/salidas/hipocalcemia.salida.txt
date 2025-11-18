@@ -48,9 +48,24 @@ Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 91.69054441260745 pul/min (16 ciclos)
 Complejo QRS ensanchado en ciclo 3: 230.0 ms
 ¡ALERTA: Hipocalcemia detectada en ciclo 3
+Severidad Hipocalcemia: 0,80
 
---- Resumen ---
+==========================================================
+--- RESUMEN CLÍNICO ---
+==========================================================
 Fichero: hipocalcemia.ecg
 Ciclos detectados: 16
 Frecuencia cardiaca: 91,69 pul/min
 Diagnóstico: Hipocalcemia
+
+--- SEVERIDAD DE PATOLOGÍAS (Análisis Difuso) ---
+  - Hipocalcemia: 0,80 (Severo)
+
+--- EVALUACIÓN DE RIESGO GLOBAL (JFuzzyLogic) ---
+Riesgo Global: 0% - BAJO
+Patología única detectada: Hipocalcemia
+
+--- RECOMENDACIONES MÉDICAS ---
+[PREVENTIVA] Control médico rutinario - Seguimiento preventivo
+[PRIORITARIA] Control de electrolitos - Análisis de sangre recomendado
+==========================================================
