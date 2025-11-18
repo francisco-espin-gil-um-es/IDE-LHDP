@@ -55,10 +55,10 @@ Intervalo QT detectado en ciclo 3
 Intervalo QT detectado en ciclo 2
 Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 91.78743961352656 pul/min (19 ciclos)
-ECG Normal - Sin patologías detectadas
+¡ALERTA: Hipopotasemia detectada en ciclo 1
 
 --- Resumen ---
 Fichero: hipopotasemia.ecg
 Ciclos detectados: 19
 Frecuencia cardiaca: 91,79 pul/min
-Diagnóstico: Normal
+Diagnóstico: Hipopotasemia

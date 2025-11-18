@@ -53,10 +53,11 @@ Intervalo QT detectado en ciclo 2
 Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 91.13924050632912 pul/min (18 ciclos)
 Complejo QRS ensanchado en ciclo 4: 230.0 ms
-ECG Normal - Sin patologías detectadas
+¡ALERTA: Hipocalcemia detectada en ciclo 4
+¡ALERTA: Isquemia Coronaria detectada en ciclo 4
 
 --- Resumen ---
 Fichero: hipocalcemia_isqcoronaria.ecg
 Ciclos detectados: 18
 Frecuencia cardiaca: 91,14 pul/min
-Diagnóstico: Normal
+Diagnóstico: Hipocalcemia, Isquemia Coronaria

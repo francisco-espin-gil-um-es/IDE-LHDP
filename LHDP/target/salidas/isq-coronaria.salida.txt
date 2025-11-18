@@ -46,10 +46,10 @@ Intervalo QT detectado en ciclo 3
 Intervalo QT detectado en ciclo 2
 Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 92.7536231884058 pul/min (16 ciclos)
-ECG Normal - Sin patologías detectadas
+¡ALERTA: Isquemia Coronaria detectada en ciclo 1
 
 --- Resumen ---
 Fichero: isq-coronaria.ecg
 Ciclos detectados: 16
 Frecuencia cardiaca: 92,75 pul/min
-Diagnóstico: Normal
+Diagnóstico: Isquemia Coronaria

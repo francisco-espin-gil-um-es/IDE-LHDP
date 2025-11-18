@@ -7,25 +7,25 @@ Fichero: bradicardia2.ecg
 Diagnóstico: Bradicardia
 
 Fichero: hipocalcemia.ecg
-Diagnóstico: Normal
+Diagnóstico: Hipocalcemia
 
 Fichero: hipocalcemia_hipopotasemia.ecg
-Diagnóstico: Normal
+Diagnóstico: Hipocalcemia, Hipopotasemia
 
 Fichero: hipocalcemia_iam.ecg
-Diagnóstico: Normal
+Diagnóstico: Hipocalcemia, Infarto Agudo de Miocardio
 
 Fichero: hipocalcemia_isqcoronaria.ecg
-Diagnóstico: Normal
+Diagnóstico: Hipocalcemia, Isquemia Coronaria
 
 Fichero: hipopotasemia.ecg
-Diagnóstico: Normal
+Diagnóstico: Hipopotasemia
 
 Fichero: iam.ecg
-Diagnóstico: Normal
+Diagnóstico: Infarto Agudo de Miocardio
 
 Fichero: isq-coronaria.ecg
-Diagnóstico: Normal
+Diagnóstico: Isquemia Coronaria
 
 Fichero: normal.ecg
 Diagnóstico: Normal

@@ -50,10 +50,11 @@ Intervalo QT detectado en ciclo 2
 Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 91.3978494623656 pul/min (17 ciclos)
 Complejo QRS ensanchado en ciclo 6: 230.0 ms
-ECG Normal - Sin patologías detectadas
+¡ALERTA: Hipocalcemia detectada en ciclo 6
+¡ALERTA: Hipopotasemia detectada en ciclo 6
 
 --- Resumen ---
 Fichero: hipocalcemia_hipopotasemia.ecg
 Ciclos detectados: 17
 Frecuencia cardiaca: 91,40 pul/min
-Diagnóstico: Normal
+Diagnóstico: Hipocalcemia, Hipopotasemia
