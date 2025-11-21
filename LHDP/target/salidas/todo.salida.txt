@@ -10,31 +10,31 @@ Riesgo: MEDIO
 
 Fichero: hipocalcemia.ecg
 Diagnóstico: Hipocalcemia
-Riesgo: BAJO
-
-Fichero: hipocalcemia_hipopotasemia.ecg
-Diagnóstico: Hipopotasemia, Hipocalcemia
-Riesgo: BAJO
-
-Fichero: hipocalcemia_iam.ecg
-Diagnóstico: Hipocalcemia, Infarto Agudo de Miocardio
-Riesgo: MEDIO
-
-Fichero: hipocalcemia_isqcoronaria.ecg
-Diagnóstico: Isquemia Coronaria, Hipocalcemia
 Riesgo: ALTO
 
+Fichero: hipocalcemia_hipopotasemia.ecg
+Diagnóstico: Hipocalcemia, Isquemia Coronaria, Hipopotasemia
+Riesgo: ALTO
+
+Fichero: hipocalcemia_iam.ecg
+Diagnóstico: Infarto Agudo de Miocardio, Hipocalcemia
+Riesgo: ALTO
+
+Fichero: hipocalcemia_isqcoronaria.ecg
+Diagnóstico: Isquemia Coronaria, Hipopotasemia, Hipocalcemia
+Riesgo: MEDIO
+
 Fichero: hipopotasemia.ecg
-Diagnóstico: Hipopotasemia
-Riesgo: BAJO
+Diagnóstico: Isquemia Coronaria, Hipopotasemia
+Riesgo: ALTO
 
 Fichero: iam.ecg
 Diagnóstico: Infarto Agudo de Miocardio
-Riesgo: MEDIO
+Riesgo: ALTO
 
 Fichero: isq-coronaria.ecg
-Diagnóstico: Isquemia Coronaria
-Riesgo: ALTO
+Diagnóstico: Isquemia Coronaria, Hipopotasemia
+Riesgo: MEDIO
 
 Fichero: normal.ecg
 Diagnóstico: Normal

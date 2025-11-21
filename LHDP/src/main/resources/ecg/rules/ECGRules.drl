@@ -14,10 +14,19 @@ import ecg.IntervaloQT;
 import ecg.IntervaloRR;
 import ecg.FrecuenciaCardiaca;
 import ecg.Diagnostico;
+import ecg.RiesgoGlobal;
+import ecg.Recomendacion;
+import ecg.FuzzyHelper;
+
+// ========================================================================
+// AGENDA: PROCESAMIENTO - Fase 1B
+// Cálculo de intervalos, complejos y frecuencia cardíaca
+// ========================================================================
 
 // Regla 1: Detectar Intervalo PR
 // Cuando hay una P y una Q del mismo ciclo, crear el intervalo PR
 rule "Detectar Intervalo PR"
+agenda-group "procesamiento"
 when
     $p : OndaP( $ciclo : ciclo, $inicioP : inicio )
     $q : OndaQ( ciclo == $ciclo, $inicioQ : inicio )
@@ -30,6 +39,7 @@ end
 // Regla 2: Detectar Complejo QRS
 // Cuando hay una Q y una S del mismo ciclo, crear el complejo QRS
 rule "Detectar Complejo QRS"
+agenda-group "procesamiento"
 when
     $q : OndaQ( $ciclo : ciclo, $inicioQ : inicio )
     $s : OndaS( ciclo == $ciclo, $finS : fin )
@@ -42,6 +52,7 @@ end
 // Regla 3: Detectar Intervalo QT
 // Cuando hay una Q y una T del mismo ciclo, crear el intervalo QT
 rule "Detectar Intervalo QT"
+agenda-group "procesamiento"
 when
     $q : OndaQ( $ciclo : ciclo, $inicioQ : inicio )
     $t : OndaT( ciclo == $ciclo, $finT : fin )
@@ -54,6 +65,7 @@ end
 // Regla 4: Detectar Intervalo RR
 // Cuando hay dos ondas R de ciclos consecutivos, crear el intervalo RR
 rule "Detectar Intervalo RR"
+agenda-group "procesamiento"
 when
     $r1 : OndaR( $ciclo1 : ciclo, $tiempoR1 : inicio )
     $r2 : OndaR( ciclo == ($ciclo1 + 1), $tiempoR2 : inicio )
@@ -65,6 +77,7 @@ end
 // Regla 5: Calcular Frecuencia Cardíaca
 // Usa el primer y último intervalo RR para calcular la FC
 rule "Calcular Frecuencia Cardiaca"
+agenda-group "procesamiento"
 when
     $r1 : OndaR( $primerCiclo : ciclo, $tiempoInicio : inicio )
     not( OndaR( ciclo < $primerCiclo ) )
@@ -82,6 +95,7 @@ end
 
 // Regla 6: Actualizar ECGData con la frecuencia calculada
 rule "Actualizar ECGData con Frecuencia"
+agenda-group "procesamiento"
 when
     $fc : FrecuenciaCardiaca( $valor : valor )
     $ecg : ECGData( frecuenciaCardiaca == 0.0 )
@@ -89,8 +103,14 @@ then
     modify($ecg) { setFrecuenciaCardiaca($valor) };
 end
 
+// ========================================================================
+// AGENDA: DIAGNÓSTICO - Fase 2
+// Detección de patologías cardíacas
+// ========================================================================
+
 // Regla 7: Detectar Taquicardia
 rule "Taquicardia"
+agenda-group "diagnostico"
 when
     FrecuenciaCardiaca( valor > 100 )
     not( Diagnostico( patologia == "Taquicardia" ) )
@@ -101,6 +121,7 @@ end
 
 // Regla 8: Detectar Bradicardia
 rule "Bradicardia"
+agenda-group "diagnostico"
 when
     FrecuenciaCardiaca( valor > 0, valor < 60 )
     not( Diagnostico( patologia == "Bradicardia" ) )
@@ -111,6 +132,7 @@ end
 
 // Regla 9: Informar Intervalos PR anormales
 rule "Intervalo PR anormal"
+agenda-group "diagnostico"
 when
     $pr : IntervaloPR( duracion < 120 || duracion > 200 )
 then
@@ -119,6 +141,7 @@ end
 
 // Regla 10: Informar Complejo QRS anormal
 rule "Complejo QRS anormal"
+agenda-group "diagnostico"
 when
     $qrs : ComplejoQRS( duracion > 120 )
 then
@@ -127,6 +150,7 @@ end
 
 // Regla 11: Detectar Hipocalcemia (QT prolongado >440ms)
 rule "Hipocalcemia"
+agenda-group "diagnostico"
 when
     $qt : IntervaloQT( duracion > 440 )
     not( Diagnostico( patologia == "Hipocalcemia" ) )
@@ -135,30 +159,36 @@ then
     System.out.println("¡ALERTA: Hipocalcemia detectada en ciclo " + $qt.getCiclo());
 end
 
-// Regla 12: Detectar Hipopotasemia (onda T muy negativa)
+// Regla 12: Detectar Hipopotasemia (onda T muy negativa < -8 mV)
+// UMBRAL AJUSTADO: -8 mV. Ondas T < -8mV pueden indicar hipopotasemia.
 rule "Hipopotasemia"
+agenda-group "diagnostico"
 when
-    $t : OndaT( pico < -10 )
+    $t : OndaT( pico < -8 )
     not( Diagnostico( patologia == "Hipopotasemia" ) )
 then
     insert( new Diagnostico("Hipopotasemia", "Onda T negativa: " + $t.getPico()) );
     System.out.println("¡ALERTA: Hipopotasemia detectada en ciclo " + $t.getCiclo());
 end
 
-// Regla 13: Detectar IAM - Infarto Agudo de Miocardio (onda T muy elevada >10)
+// Regla 13: Detectar IAM - Infarto Agudo de Miocardio (onda T muy elevada >8)
+// UMBRAL AJUSTADO: 8.0 mV es más realista. Ondas T >8mV ya son altamente anormales.
 rule "Infarto Agudo de Miocardio"
+agenda-group "diagnostico"
 when
-    $t : OndaT( pico > 10 )
+    $t : OndaT( pico > 8 )
     not( Diagnostico( patologia == "Infarto Agudo de Miocardio" ) )
 then
     insert( new Diagnostico("Infarto Agudo de Miocardio", "Onda T elevada: " + $t.getPico()) );
     System.out.println("¡ALERTA: Infarto Agudo de Miocardio (IAM) detectado en ciclo " + $t.getCiclo());
 end
 
-// Regla 14: Detectar Isquemia Coronaria (onda T negativa entre -9 y -10)
+// Regla 14: Detectar Isquemia Coronaria (onda T negativa < -7 mV)
+// UMBRAL AJUSTADO: -7 mV es más realista. Inversión T < -7mV indica isquemia miocárdica.
 rule "Isquemia Coronaria"
+agenda-group "diagnostico"
 when
-    $t : OndaT( pico < -9, pico >= -10 )
+    $t : OndaT( pico < -7 )
     not( Diagnostico( patologia == "Isquemia Coronaria" ) )
 then
     insert( new Diagnostico("Isquemia Coronaria", "Onda T negativa: " + $t.getPico()) );
@@ -167,6 +197,7 @@ end
 
 // Regla 15: Detectar Contracción Ventricular Prematura (QRS muy corto <30ms)
 rule "Contracción Ventricular Prematura"
+agenda-group "diagnostico"
 when
     $qrs : ComplejoQRS( duracion < 30 )
     not( Diagnostico( patologia == "Contracción Ventricular Prematura" ) )
@@ -177,6 +208,7 @@ end
 
 // Regla 16: ECG Normal (si no hay patologías detectadas)
 rule "ECG Normal"
+agenda-group "diagnostico"
 when
     FrecuenciaCardiaca( valor >= 60, valor <= 100 )
     not( Diagnostico() )
@@ -186,98 +218,258 @@ then
 end
 
 // ========================================================================
-// FASE 3: REGLAS DIFUSAS - EVALUACIÓN DE SEVERIDAD
+// FASE 3: EVALUACIÓN DE SEVERIDAD - Se calcula dentro de agenda "diagnostico"
+// Estas reglas calculan la severidad y la asignan directamente al Diagnostico
 // ========================================================================
 
-// Importaciones para Fase 3
-import ecg.SeveridadFuzzy;
-
 // Regla 17: Calcular severidad difusa de Taquicardia
+// JUSTIFICACIÓN: FC normal 60-100 ppm. FC >100 es taquicardia.
+// Severidad base 20% (leve) escalando a 100% en taquicardia severa.
+// Fórmula: 0.2 + (FC - 100) / 75 → FC=100: 20%, FC=130: 60%, FC≥175: 100%
 rule "Calcular Severidad Taquicardia"
+agenda-group "diagnostico"
 salience 10
 when
     $fc : FrecuenciaCardiaca( valor > 100, $valor : valor )
-    Diagnostico( patologia == "Taquicardia" )
-    not( SeveridadFuzzy( patologia == "Taquicardia" ) )
+    $d : Diagnostico( patologia == "Taquicardia", severidad == 0.0 )
 then
-    // Función de pertenencia: (FC - 100) / 60, normalizado a [0, 1]
-    // FC=100 -> 0.0, FC=160+ -> 1.0
-    double severidad = Math.min(($valor - 100.0) / 60.0, 1.0);
-    insert( new SeveridadFuzzy("Taquicardia", severidad) );
-    System.out.println("Severidad Taquicardia: " + String.format("%.2f", severidad));
+    // Severidad base del 20% + escala hasta 100%
+    // FC=100 → 0.20 (Leve), FC=130 → 0.60 (Moderado), FC≥175 → 1.0 (Severo)
+    double severidad = Math.min(0.2 + ($valor - 100.0) / 75.0, 1.0);
+    modify( $d ) { setSeveridad(severidad) }
+    System.out.println("Severidad Taquicardia: " + String.format("%.2f", severidad) + " (" + $d.getNivelSeveridad() + ")");
 end
 
 // Regla 18: Calcular severidad difusa de Bradicardia
+// JUSTIFICACIÓN: FC normal 60-100 ppm. FC <60 es bradicardia.
+// Severidad base 20% (leve) escalando a 100% en bradicardia severa.
+// Fórmula: 0.2 + (60 - FC) / 50 → FC=60: 20%, FC=40: 60%, FC≤10: 100%
 rule "Calcular Severidad Bradicardia"
+agenda-group "diagnostico"
 salience 10
 when
     $fc : FrecuenciaCardiaca( valor < 60, $valor : valor )
-    Diagnostico( patologia == "Bradicardia" )
-    not( SeveridadFuzzy( patologia == "Bradicardia" ) )
+    $d : Diagnostico( patologia == "Bradicardia", severidad == 0.0 )
 then
-    // Función de pertenencia: (60 - FC) / 40, normalizado a [0, 1]
-    // FC=60 -> 0.0, FC=20 -> 1.0
-    double severidad = Math.min((60.0 - $valor) / 40.0, 1.0);
-    insert( new SeveridadFuzzy("Bradicardia", severidad) );
-    System.out.println("Severidad Bradicardia: " + String.format("%.2f", severidad));
+    // Severidad base del 20% + escala hasta 100%
+    // FC=60 → 0.20 (Leve), FC=40 → 0.60 (Moderado), FC≤10 → 1.0 (Severo/Crítico)
+    double severidad = Math.min(0.2 + (60.0 - $valor) / 50.0, 1.0);
+    modify( $d ) { setSeveridad(severidad) }
+    System.out.println("Severidad Bradicardia: " + String.format("%.2f", severidad) + " (" + $d.getNivelSeveridad() + ")");
 end
 
 // Regla 19: Calcular severidad difusa de IAM
+// JUSTIFICACIÓN: Basado en evidencia médica (ESC/ACC/AHA 2018), las ondas T hiperagudas
+// son un hallazgo temprano en IAM. Umbral ajustado a 8.0 mV (más realista).
+// Severidad progresiva: T=8mV: 30% (Leve), T=10mV: 50% (Moderado), T≥13mV: 100% (Severo)
+// Fórmula: 0.3 + (pico - 8) / 5 → Escala de 30% a 100% en rango clínicamente relevante
 rule "Calcular Severidad IAM"
+agenda-group "diagnostico"
 salience 10
 when
-    $t : OndaT( $pico : pico > 10 )
-    Diagnostico( patologia == "Infarto Agudo de Miocardio" )
-    not( SeveridadFuzzy( patologia == "Infarto Agudo de Miocardio" ) )
+    $d : Diagnostico( patologia == "Infarto Agudo de Miocardio", severidad == 0.0, $detalles : detalles )
+    $t : OndaT( pico > 8, $pico : pico, $ciclo : ciclo )
+    // Verificar que estamos usando la onda T del primer ciclo detectado
+    not( OndaT( pico > 8, ciclo < $ciclo ) )
 then
-    // Función de pertenencia: (pico - 10) / 20, normalizado a [0, 1]
-    // T=10 -> 0.0, T=30+ -> 1.0
-    double severidad = Math.min(($pico - 10.0) / 20.0, 1.0);
-    insert( new SeveridadFuzzy("Infarto Agudo de Miocardio", severidad) );
-    System.out.println("Severidad IAM: " + String.format("%.2f", severidad));
+    // Severidad base del 30% (ondas T >8mV ya son anormales) escalando a 100%
+    // T=8 → 0.30 (Leve), T=9 → 0.50 (Moderado), T=10 → 0.70 (Moderado-Severo), T≥13 → 1.0 (Severo)
+    double severidad = Math.min(0.3 + ($pico - 8.0) / 5.0, 1.0);
+    modify( $d ) { setSeveridad(severidad) }
+    System.out.println("Severidad IAM: " + String.format("%.2f", severidad) + " (" + $d.getNivelSeveridad() + ") - ciclo " + $ciclo + ", onda T=" + String.format("%.2f", $pico) + " mV");
 end
 
 // Regla 20: Calcular severidad difusa de Isquemia Coronaria
+// JUSTIFICACIÓN: La inversión de onda T (T negativa) indica isquemia miocárdica.
+// Umbral ajustado a -7 mV (inversión significativa). Severidad base del 25%.
+// Fórmula ajustada: 0.25 + (|pico| - 7) / 8 → T=-7mV: 25%, T=-11mV: 75%, T≥-15mV: 100%
 rule "Calcular Severidad Isquemia Coronaria"
+agenda-group "diagnostico"
 salience 10
 when
-    $t : OndaT( pico >= -10, pico < -9, $pico : pico )
-    Diagnostico( patologia == "Isquemia Coronaria" )
-    not( SeveridadFuzzy( patologia == "Isquemia Coronaria" ) )
+    $d : Diagnostico( patologia == "Isquemia Coronaria", severidad == 0.0, $detalles : detalles )
+    $t : OndaT( pico < -7, $pico : pico, $ciclo : ciclo )
+    // Usar la primera onda T que cumple la condición
+    not( OndaT( pico < -7, ciclo < $ciclo ) )
 then
-    // Función de pertenencia: (10 + |pico|) / 5, normalizado a [0, 1]
-    // T=-9 -> 0.2, T=-15 -> 1.0
-    double severidad = Math.min((10.0 + Math.abs($pico)) / 10.0, 1.0);
-    insert( new SeveridadFuzzy("Isquemia Coronaria", severidad) );
-    System.out.println("Severidad Isquemia: " + String.format("%.2f", severidad));
+    // Severidad base del 25% + escala hasta 100% en ondas T muy invertidas
+    // T=-7 → 0.25 (Leve), T=-9 → 0.50 (Moderado), T=-11 → 0.75 (Severo), T≤-15 → 1.0 (Crítico)
+    double severidad = Math.min(0.25 + (Math.abs($pico) - 7.0) / 8.0, 1.0);
+    modify( $d ) { setSeveridad(severidad) }
+    System.out.println("Severidad Isquemia: " + String.format("%.2f", severidad) + " (" + $d.getNivelSeveridad() + ") - ciclo " + $ciclo + ", onda T=" + String.format("%.2f", $pico) + " mV");
 end
 
 // Regla 21: Calcular severidad difusa de Hipocalcemia
+// JUSTIFICACIÓN: Intervalo QT prolongado (>440 ms) indica hipocalcemia. Según literatura médica,
+// QT > 500 ms tiene alto riesgo de arritmias fatales (Torsades de Pointes).
+// Severidad base del 30% escalando a 100% en QT muy prolongado.
+// Fórmula ajustada: 0.3 + (dur - 440) / 80 → QT=440ms: 30%, QT=480ms: 80%, QT≥520ms: 100%
 rule "Calcular Severidad Hipocalcemia"
+agenda-group "diagnostico"
 salience 10
 when
-    $qt : IntervaloQT( duracion > 440, $duracion : duracion )
-    Diagnostico( patologia == "Hipocalcemia" )
-    not( SeveridadFuzzy( patologia == "Hipocalcemia" ) )
+    $d : Diagnostico( patologia == "Hipocalcemia", severidad == 0.0, $detalles : detalles )
+    $qt : IntervaloQT( duracion > 440, $dur : duracion, $ciclo : ciclo )
+    // Usar el primer intervalo QT que cumple la condición
+    not( IntervaloQT( duracion > 440, ciclo < $ciclo ) )
 then
-    // Función de pertenencia: (QT - 440) / 100, normalizado a [0, 1]
-    // QT=440 -> 0.0, QT=540+ -> 1.0
-    double severidad = Math.min(($duracion - 440.0) / 100.0, 1.0);
-    insert( new SeveridadFuzzy("Hipocalcemia", severidad) );
-    System.out.println("Severidad Hipocalcemia: " + String.format("%.2f", severidad));
+    // Severidad base del 30% + escala hasta 100% en intervalos QT muy prolongados
+    // QT=440 → 0.30 (Leve), QT=480 → 0.80 (Severo), QT≥520 → 1.0 (Severo/Crítico)
+    double severidad = Math.min(0.3 + ($dur - 440.0) / 80.0, 1.0);
+    modify( $d ) { setSeveridad(severidad) }
+    System.out.println("Severidad Hipocalcemia: " + String.format("%.2f", severidad) + " (" + $d.getNivelSeveridad() + ") - ciclo " + $ciclo + ", intervalo QT=" + String.format("%.2f", $dur) + " ms");
 end
 
 // Regla 22: Calcular severidad difusa de Hipopotasemia
+// JUSTIFICACIÓN: Onda T muy invertida/aplanada indica hipopotasemia.
+// Umbral ajustado a -8 mV. La hipopotasemia puede causar arritmias ventriculares letales.
+// Fórmula ajustada: 0.3 + (|pico| - 8) / 10 → T=-8mV: 30%, T=-13mV: 80%, T≥-18mV: 100%
 rule "Calcular Severidad Hipopotasemia"
+agenda-group "diagnostico"
 salience 10
 when
-    $t : OndaT( pico < -10, $pico : pico )
-    Diagnostico( patologia == "Hipopotasemia" )
-    not( SeveridadFuzzy( patologia == "Hipopotasemia" ) )
+    $d : Diagnostico( patologia == "Hipopotasemia", severidad == 0.0, $detalles : detalles )
+    $t : OndaT( pico < -8, $pico : pico, $ciclo : ciclo )
+    // Usar la primera onda T que cumple la condición
+    not( OndaT( pico < -8, ciclo < $ciclo ) )
 then
-    // Función de pertenencia: (|pico| - 10) / 20, normalizado a [0, 1]
-    // T=-10 -> 0.0, T=-30 -> 1.0
-    double severidad = Math.min((Math.abs($pico) - 10.0) / 20.0, 1.0);
-    insert( new SeveridadFuzzy("Hipopotasemia", severidad) );
-    System.out.println("Severidad Hipopotasemia: " + String.format("%.2f", severidad));
+    // Severidad base del 30% + escala hasta 100%
+    // T=-8 → 0.30 (Leve), T=-10 → 0.50 (Moderado), T=-13 → 0.80 (Severo), T≤-18 → 1.0 (Crítico)
+    double severidad = Math.min(0.3 + (Math.abs($pico) - 8.0) / 10.0, 1.0);
+    modify( $d ) { setSeveridad(severidad) }
+    System.out.println("Severidad Hipopotasemia: " + String.format("%.2f", severidad) + " (" + $d.getNivelSeveridad() + ") - ciclo " + $ciclo + ", onda T=" + String.format("%.2f", $pico) + " mV");
+end
+
+// ========================================================================
+// AGENDA: RIESGO FUZZY - Fase 3 con JFuzzyLogic
+// Evaluación del riesgo global mediante motor de lógica difusa
+// ========================================================================
+
+// Regla 23: Inicializar el sistema de lógica difusa JFuzzyLogic
+rule "Inicializar Sistema Fuzzy"
+agenda-group "riesgo-fuzzy"
+salience 100
+when
+    not( RiesgoGlobal() )  // Solo inicializar si no se ha evaluado aún
+then
+    ecg.FuzzyHelper.inicializarSistemaFuzzy();
+    System.out.println("[FUZZY] Sistema JFuzzyLogic inicializado correctamente");
+end
+
+// Regla 24: Evaluar riesgo global usando JFuzzyLogic con List<Diagnostico>
+rule "Evaluar Riesgo Global Fuzzy"
+agenda-group "riesgo-fuzzy"
+salience 10
+when
+    // Verificar que hay al menos un diagnóstico y que no existe un RiesgoGlobal
+    exists( Diagnostico( patologia != "Normal" ) )
+    not( RiesgoGlobal() )
+    $diagnosticos : java.util.List() from collect( Diagnostico() )
+    $numDiagnosticos : Number() from accumulate(
+        Diagnostico( patologia != "Normal" ),
+        count(1)
+    )
+then
+    int numPatologias = $numDiagnosticos.intValue();
+    
+    // Invocar al motor JFuzzyLogic mediante FuzzyHelper con List<Diagnostico>
+    double riesgoNumerico = ecg.FuzzyHelper.evaluarRiesgoFuzzy($diagnosticos, numPatologias);
+    String nivelRiesgo = ecg.FuzzyHelper.clasificarNivelRiesgo(riesgoNumerico);
+    String justificacion = ecg.FuzzyHelper.generarJustificacion(numPatologias, $diagnosticos);
+    
+    // Crear objeto RiesgoGlobal e insertarlo en la working memory
+    RiesgoGlobal riesgo = new RiesgoGlobal(riesgoNumerico, nivelRiesgo, justificacion);
+    insert(riesgo);
+    
+    System.out.println("[FUZZY] ================================");
+    System.out.println("[FUZZY] RIESGO GLOBAL: " + nivelRiesgo);
+    System.out.println("[FUZZY] Valor numérico: " + String.format("%.3f", riesgoNumerico));
+    System.out.println("[FUZZY] Patologías detectadas: " + numPatologias);
+    System.out.println("[FUZZY] " + justificacion);
+    System.out.println("[FUZZY] ================================");
+end
+
+// ========================================================================
+// AGENDA: RECOMENDACIÓN/REPORT - Fase 3
+// Generación de recomendaciones según el nivel de riesgo
+// ========================================================================
+
+// Regla 26: Recomendación para Riesgo CRÍTICO
+rule "Recomendación Riesgo Crítico"
+agenda-group "recomendacion"
+when
+    $riesgo : RiesgoGlobal( nivelRiesgo == "CRÍTICO" )
+    not( Recomendacion( tipo == "URGENTE" ) )
+then
+    Recomendacion rec = new Recomendacion(
+        "URGENTE",
+        "ATENCIÓN MÉDICA INMEDIATA REQUERIDA",
+        "El paciente presenta riesgo cardiológico CRÍTICO. Se recomienda:\n" +
+        "  • Traslado urgente a unidad de emergencias cardiológicas\n" +
+        "  • Monitorización continua de signos vitales\n" +
+        "  • Evaluación inmediata por cardiólogo\n" +
+        "  • Preparar protocolo de intervención de emergencia"
+    );
+    insert(rec);
+    System.out.println("\n⚠️ [RECOMENDACIÓN CRÍTICA] " + rec.getTitulo());
+end
+
+// Regla 27: Recomendación para Riesgo ALTO
+rule "Recomendación Riesgo Alto"
+agenda-group "recomendacion"
+when
+    $riesgo : RiesgoGlobal( nivelRiesgo == "ALTO" )
+    not( Recomendacion( tipo == "ALTA_PRIORIDAD" ) )
+then
+    Recomendacion rec = new Recomendacion(
+        "ALTA_PRIORIDAD",
+        "CONSULTA CARDIOLÓGICA URGENTE",
+        "El paciente presenta riesgo cardiológico ALTO. Se recomienda:\n" +
+        "  • Consulta con cardiólogo en 24-48 horas\n" +
+        "  • Realizar ecocardiograma y pruebas complementarias\n" +
+        "  • Monitorización ambulatoria (Holter 24h)\n" +
+        "  • Ajustar tratamiento farmacológico si procede"
+    );
+    insert(rec);
+    System.out.println("\n⚠️ [RECOMENDACIÓN ALTA] " + rec.getTitulo());
+end
+
+// Regla 28: Recomendación para Riesgo MEDIO
+rule "Recomendación Riesgo Medio"
+agenda-group "recomendacion"
+when
+    $riesgo : RiesgoGlobal( nivelRiesgo == "MEDIO" )
+    not( Recomendacion( tipo == "SEGUIMIENTO" ) )
+then
+    Recomendacion rec = new Recomendacion(
+        "SEGUIMIENTO",
+        "EVALUACIÓN CARDIOLÓGICA PROGRAMADA",
+        "El paciente presenta riesgo cardiológico MEDIO. Se recomienda:\n" +
+        "  • Programar consulta cardiológica en 1-2 semanas\n" +
+        "  • Realizar ECG de control\n" +
+        "  • Analítica completa (ionograma, marcadores cardiacos)\n" +
+        "  • Seguimiento de factores de riesgo cardiovascular"
+    );
+    insert(rec);
+    System.out.println("\n📋 [RECOMENDACIÓN MEDIA] " + rec.getTitulo());
+end
+
+// Regla 29: Recomendación para Riesgo BAJO
+rule "Recomendación Riesgo Bajo"
+agenda-group "recomendacion"
+when
+    $riesgo : RiesgoGlobal( nivelRiesgo == "BAJO" )
+    not( Recomendacion( tipo == "PREVENTIVO" ) )
+then
+    Recomendacion rec = new Recomendacion(
+        "PREVENTIVO",
+        "MANTENIMIENTO Y PREVENCIÓN",
+        "El paciente presenta riesgo cardiológico BAJO. Se recomienda:\n" +
+        "  • Mantener hábitos de vida saludables\n" +
+        "  • Revisión cardiológica anual rutinaria\n" +
+        "  • Control periódico de tensión arterial\n" +
+        "  • Actividad física regular moderada"
+    );
+    insert(rec);
+    System.out.println("\n✓ [RECOMENDACIÓN BAJA] " + rec.getTitulo());
 end

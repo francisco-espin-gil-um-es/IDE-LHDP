@@ -127,21 +127,29 @@ RULEBLOCK evaluacion
     RULE 14 : IF severidad_bradicardia IS severa THEN riesgo_global IS alto;
     RULE 15 : IF severidad_bradicardia IS moderada THEN riesgo_global IS medio;
 
+    // --- Reglas para Hipocalcemia (QT prolongado) ---
+    RULE 16 : IF severidad_hipocalcemia IS severa THEN riesgo_global IS alto;
+    RULE 17 : IF severidad_hipocalcemia IS moderada THEN riesgo_global IS medio;
+
+    // --- Reglas para Hipopotasemia ---
+    RULE 18 : IF severidad_hipopotasemia IS severa THEN riesgo_global IS alto;
+    RULE 19 : IF severidad_hipopotasemia IS moderada THEN riesgo_global IS medio;
+
     // --- Reglas de Comorbilidad Alta (múltiples patologías) ---
-    RULE 16 : IF num_patologias IS comorbilidad_alta THEN riesgo_global IS critico;
-    RULE 17 : IF num_patologias IS multiple AND severidad_iam IS moderada 
+    RULE 20 : IF num_patologias IS comorbilidad_alta THEN riesgo_global IS critico;
+    RULE 21 : IF num_patologias IS multiple AND severidad_iam IS moderada 
               THEN riesgo_global IS critico;
-    RULE 18 : IF num_patologias IS multiple AND severidad_isquemia IS moderada 
+    RULE 22 : IF num_patologias IS multiple AND severidad_isquemia IS moderada 
               THEN riesgo_global IS alto;
 
     // --- Reglas de Riesgo Bajo ---
-    RULE 19 : IF severidad_taquicardia IS leve AND num_patologias IS unica 
+    RULE 23 : IF severidad_taquicardia IS leve AND num_patologias IS unica 
               THEN riesgo_global IS bajo;
-    RULE 20 : IF severidad_bradicardia IS leve AND num_patologias IS unica 
+    RULE 24 : IF severidad_bradicardia IS leve AND num_patologias IS unica 
               THEN riesgo_global IS bajo;
-    RULE 21 : IF severidad_hipocalcemia IS leve AND num_patologias IS unica 
+    RULE 25 : IF severidad_hipocalcemia IS leve AND num_patologias IS unica 
               THEN riesgo_global IS bajo;
-    RULE 22 : IF severidad_hipopotasemia IS leve AND num_patologias IS unica 
+    RULE 26 : IF severidad_hipopotasemia IS leve AND num_patologias IS unica 
               THEN riesgo_global IS bajo;
 
 END_RULEBLOCK

@@ -1,3 +1,7 @@
+
+========== INICIANDO PROCESAMIENTO ECG ==========
+
+[AGENDA: Procesamiento] Activando...
 Intervalo PR detectado en ciclo 50
 Intervalo PR detectado en ciclo 49
 Intervalo PR detectado en ciclo 48
@@ -148,8 +152,11 @@ Intervalo QT detectado en ciclo 3
 Intervalo QT detectado en ciclo 2
 Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 145.7725947521866 pul/min (50 ciclos)
+[AGENDA: Procesamiento] Completada
+
+[AGENDA: Diagnóstico] Activando...
 ¡ALERTA: Taquicardia detectada!
-Severidad Taquicardia: 0,76
+Severidad Taquicardia: 0,81 (Severo)
 Intervalo PR anormal en ciclo 50: 15.0 ms
 Intervalo PR anormal en ciclo 49: 15.0 ms
 Intervalo PR anormal en ciclo 48: 15.0 ms
@@ -200,6 +207,25 @@ Intervalo PR anormal en ciclo 4: 15.0 ms
 Intervalo PR anormal en ciclo 3: 15.0 ms
 Intervalo PR anormal en ciclo 2: 15.0 ms
 Intervalo PR anormal en ciclo 1: 15.0 ms
+[AGENDA: Diagnóstico] Completada
+
+[AGENDA: Riesgo Fuzzy] Activando...
+[FUZZY] Sistema JFuzzyLogic inicializado correctamente
+[FUZZY] ================================
+[FUZZY] RIESGO GLOBAL: ALTO
+[FUZZY] Valor numérico: 0,783
+[FUZZY] Patologías detectadas: 1
+[FUZZY] Detectadas 1 patología(s). Taquicardia (severo)
+[FUZZY] ================================
+[AGENDA: Riesgo Fuzzy] Completada
+
+[AGENDA: Recomendación] Activando...
+
+⚠️ [RECOMENDACIÓN ALTA] CONSULTA CARDIOLÓGICA URGENTE
+[AGENDA: Recomendación] Completada
+
+========== PROCESAMIENTO COMPLETADO ==========
+
 
 ==========================================================
 --- RESUMEN CLÍNICO ---
@@ -210,12 +236,17 @@ Frecuencia cardiaca: 145,77 pul/min
 Diagnóstico: Taquicardia
 
 --- SEVERIDAD DE PATOLOGÍAS (Análisis Difuso) ---
-  - Taquicardia: 0,76 (Severo)
+  - Taquicardia: 0,81 (Severo)
 
 --- EVALUACIÓN DE RIESGO GLOBAL (JFuzzyLogic) ---
 Riesgo Global: 78% - ALTO
-Patología única detectada: Taquicardia
+Detectadas 1 patología(s). Taquicardia (severo)
 
 --- RECOMENDACIONES MÉDICAS ---
-[PRIORITARIA] Evaluación cardiológica urgente en menos de 24 horas
+[ALTA_PRIORIDAD] CONSULTA CARDIOLÓGICA URGENTE
+El paciente presenta riesgo cardiológico ALTO. Se recomienda:
+  • Consulta con cardiólogo en 24-48 horas
+  • Realizar ecocardiograma y pruebas complementarias
+  • Monitorización ambulatoria (Holter 24h)
+  • Ajustar tratamiento farmacológico si procede
 ==========================================================

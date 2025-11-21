@@ -1,3 +1,7 @@
+
+========== INICIANDO PROCESAMIENTO ECG ==========
+
+[AGENDA: Procesamiento] Activando...
 Intervalo PR detectado en ciclo 17
 Intervalo PR detectado en ciclo 16
 Intervalo PR detectado en ciclo 15
@@ -49,11 +53,35 @@ Intervalo QT detectado en ciclo 3
 Intervalo QT detectado en ciclo 2
 Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 91.3978494623656 pul/min (17 ciclos)
+[AGENDA: Procesamiento] Completada
+
+[AGENDA: Diagnóstico] Activando...
 Complejo QRS ensanchado en ciclo 6: 230.0 ms
 ¡ALERTA: Hipocalcemia detectada en ciclo 6
-Severidad Hipocalcemia: 0,80
+Severidad Hipocalcemia: 1,00 (Severo) - ciclo 6, intervalo QT=520,00 ms
 ¡ALERTA: Hipopotasemia detectada en ciclo 6
-Severidad Hipopotasemia: 0,25
+Severidad Hipopotasemia: 0,99 (Severo) - ciclo 6, onda T=-14,92 mV
+¡ALERTA: Isquemia Coronaria detectada en ciclo 6
+Severidad Isquemia: 1,00 (Severo) - ciclo 6, onda T=-14,92 mV
+[AGENDA: Diagnóstico] Completada
+
+[AGENDA: Riesgo Fuzzy] Activando...
+[FUZZY] Sistema JFuzzyLogic inicializado correctamente
+[FUZZY] ================================
+[FUZZY] RIESGO GLOBAL: ALTO
+[FUZZY] Valor numérico: 0,783
+[FUZZY] Patologías detectadas: 3
+[FUZZY] Detectadas 3 patología(s). Isquemia Coronaria (severo), Hipopotasemia (severo), Hipocalcemia (severo)
+[FUZZY] ================================
+[AGENDA: Riesgo Fuzzy] Completada
+
+[AGENDA: Recomendación] Activando...
+
+⚠️ [RECOMENDACIÓN ALTA] CONSULTA CARDIOLÓGICA URGENTE
+[AGENDA: Recomendación] Completada
+
+========== PROCESAMIENTO COMPLETADO ==========
+
 
 ==========================================================
 --- RESUMEN CLÍNICO ---
@@ -61,18 +89,22 @@ Severidad Hipopotasemia: 0,25
 Fichero: hipocalcemia_hipopotasemia.ecg
 Ciclos detectados: 17
 Frecuencia cardiaca: 91,40 pul/min
-Diagnóstico: Hipopotasemia, Hipocalcemia
+Diagnóstico: Hipocalcemia, Isquemia Coronaria, Hipopotasemia
 
 --- SEVERIDAD DE PATOLOGÍAS (Análisis Difuso) ---
-  - Hipopotasemia: 0,25 (Leve)
-  - Hipocalcemia: 0,80 (Severo)
+  - Hipocalcemia: 1,00 (Severo)
+  - Isquemia Coronaria: 1,00 (Severo)
+  - Hipopotasemia: 0,99 (Severo)
 
 --- EVALUACIÓN DE RIESGO GLOBAL (JFuzzyLogic) ---
-Riesgo Global: 0% - BAJO
-Comorbilidad: 2 patologías detectadas
+Riesgo Global: 78% - ALTO
+Detectadas 3 patología(s). Isquemia Coronaria (severo), Hipopotasemia (severo), Hipocalcemia (severo)
 
 --- RECOMENDACIONES MÉDICAS ---
-[PREVENTIVA] Control médico rutinario - Seguimiento preventivo
-[PRIORITARIA] Control de electrolitos - Análisis de sangre recomendado
-[PRIORITARIA] Control de electrolitos - Análisis de sangre recomendado
+[ALTA_PRIORIDAD] CONSULTA CARDIOLÓGICA URGENTE
+El paciente presenta riesgo cardiológico ALTO. Se recomienda:
+  • Consulta con cardiólogo en 24-48 horas
+  • Realizar ecocardiograma y pruebas complementarias
+  • Monitorización ambulatoria (Holter 24h)
+  • Ajustar tratamiento farmacológico si procede
 ==========================================================

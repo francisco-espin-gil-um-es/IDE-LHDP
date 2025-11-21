@@ -1,3 +1,7 @@
+
+========== INICIANDO PROCESAMIENTO ECG ==========
+
+[AGENDA: Procesamiento] Activando...
 Intervalo PR detectado en ciclo 16
 Intervalo PR detectado en ciclo 15
 Intervalo PR detectado en ciclo 14
@@ -46,11 +50,33 @@ Intervalo QT detectado en ciclo 3
 Intervalo QT detectado en ciclo 2
 Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 92.3076923076923 pul/min (16 ciclos)
+[AGENDA: Procesamiento] Completada
+
+[AGENDA: Diagnóstico] Activando...
 Complejo QRS ensanchado en ciclo 1: 230.0 ms
 ¡ALERTA: Hipocalcemia detectada en ciclo 1
-Severidad Hipocalcemia: 0,80
+Severidad Hipocalcemia: 1,00 (Severo) - ciclo 1, intervalo QT=520,00 ms
 ¡ALERTA: Infarto Agudo de Miocardio (IAM) detectado en ciclo 1
-Severidad IAM: 0,00
+Severidad IAM: 0,71 (Severo) - ciclo 1, onda T=10,07 mV
+[AGENDA: Diagnóstico] Completada
+
+[AGENDA: Riesgo Fuzzy] Activando...
+[FUZZY] Sistema JFuzzyLogic inicializado correctamente
+[FUZZY] ================================
+[FUZZY] RIESGO GLOBAL: ALTO
+[FUZZY] Valor numérico: 0,828
+[FUZZY] Patologías detectadas: 2
+[FUZZY] Detectadas 2 patología(s). Infarto Agudo de Miocardio (severo), Hipocalcemia (severo)
+[FUZZY] ================================
+[AGENDA: Riesgo Fuzzy] Completada
+
+[AGENDA: Recomendación] Activando...
+
+⚠️ [RECOMENDACIÓN ALTA] CONSULTA CARDIOLÓGICA URGENTE
+[AGENDA: Recomendación] Completada
+
+========== PROCESAMIENTO COMPLETADO ==========
+
 
 ==========================================================
 --- RESUMEN CLÍNICO ---
@@ -58,17 +84,21 @@ Severidad IAM: 0,00
 Fichero: hipocalcemia_iam.ecg
 Ciclos detectados: 16
 Frecuencia cardiaca: 92,31 pul/min
-Diagnóstico: Hipocalcemia, Infarto Agudo de Miocardio
+Diagnóstico: Infarto Agudo de Miocardio, Hipocalcemia
 
 --- SEVERIDAD DE PATOLOGÍAS (Análisis Difuso) ---
-  - Hipocalcemia: 0,80 (Severo)
-  - Infarto Agudo de Miocardio: 0,00 (Leve)
+  - Infarto Agudo de Miocardio: 0,71 (Severo)
+  - Hipocalcemia: 1,00 (Severo)
 
 --- EVALUACIÓN DE RIESGO GLOBAL (JFuzzyLogic) ---
-Riesgo Global: 50% - MEDIO
-Comorbilidad: 2 patologías detectadas
+Riesgo Global: 83% - ALTO
+Detectadas 2 patología(s). Infarto Agudo de Miocardio (severo), Hipocalcemia (severo)
 
 --- RECOMENDACIONES MÉDICAS ---
-[SEGUIMIENTO] Consulta con cardiólogo en los próximos 7 días
-[PRIORITARIA] Control de electrolitos - Análisis de sangre recomendado
+[ALTA_PRIORIDAD] CONSULTA CARDIOLÓGICA URGENTE
+El paciente presenta riesgo cardiológico ALTO. Se recomienda:
+  • Consulta con cardiólogo en 24-48 horas
+  • Realizar ecocardiograma y pruebas complementarias
+  • Monitorización ambulatoria (Holter 24h)
+  • Ajustar tratamiento farmacológico si procede
 ==========================================================

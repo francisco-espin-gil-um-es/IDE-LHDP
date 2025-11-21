@@ -1,3 +1,7 @@
+
+========== INICIANDO PROCESAMIENTO ECG ==========
+
+[AGENDA: Procesamiento] Activando...
 Intervalo PR detectado en ciclo 16
 Intervalo PR detectado en ciclo 15
 Intervalo PR detectado en ciclo 14
@@ -46,8 +50,30 @@ Intervalo QT detectado en ciclo 3
 Intervalo QT detectado en ciclo 2
 Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 92.7536231884058 pul/min (16 ciclos)
+[AGENDA: Procesamiento] Completada
+
+[AGENDA: Diagnóstico] Activando...
 ¡ALERTA: Infarto Agudo de Miocardio (IAM) detectado en ciclo 1
-Severidad IAM: 0,00
+Severidad IAM: 0,70 (Severo) - ciclo 1, onda T=10,02 mV
+[AGENDA: Diagnóstico] Completada
+
+[AGENDA: Riesgo Fuzzy] Activando...
+[FUZZY] Sistema JFuzzyLogic inicializado correctamente
+[FUZZY] ================================
+[FUZZY] RIESGO GLOBAL: ALTO
+[FUZZY] Valor numérico: 0,785
+[FUZZY] Patologías detectadas: 1
+[FUZZY] Detectadas 1 patología(s). Infarto Agudo de Miocardio (severo)
+[FUZZY] ================================
+[AGENDA: Riesgo Fuzzy] Completada
+
+[AGENDA: Recomendación] Activando...
+
+⚠️ [RECOMENDACIÓN ALTA] CONSULTA CARDIOLÓGICA URGENTE
+[AGENDA: Recomendación] Completada
+
+========== PROCESAMIENTO COMPLETADO ==========
+
 
 ==========================================================
 --- RESUMEN CLÍNICO ---
@@ -58,12 +84,17 @@ Frecuencia cardiaca: 92,75 pul/min
 Diagnóstico: Infarto Agudo de Miocardio
 
 --- SEVERIDAD DE PATOLOGÍAS (Análisis Difuso) ---
-  - Infarto Agudo de Miocardio: 0,00 (Leve)
+  - Infarto Agudo de Miocardio: 0,70 (Severo)
 
 --- EVALUACIÓN DE RIESGO GLOBAL (JFuzzyLogic) ---
-Riesgo Global: 50% - MEDIO
-Patología única detectada: Infarto Agudo de Miocardio
+Riesgo Global: 78% - ALTO
+Detectadas 1 patología(s). Infarto Agudo de Miocardio (severo)
 
 --- RECOMENDACIONES MÉDICAS ---
-[SEGUIMIENTO] Consulta con cardiólogo en los próximos 7 días
+[ALTA_PRIORIDAD] CONSULTA CARDIOLÓGICA URGENTE
+El paciente presenta riesgo cardiológico ALTO. Se recomienda:
+  • Consulta con cardiólogo en 24-48 horas
+  • Realizar ecocardiograma y pruebas complementarias
+  • Monitorización ambulatoria (Holter 24h)
+  • Ajustar tratamiento farmacológico si procede
 ==========================================================

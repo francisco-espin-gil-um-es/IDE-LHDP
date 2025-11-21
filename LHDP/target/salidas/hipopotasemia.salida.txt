@@ -1,3 +1,7 @@
+
+========== INICIANDO PROCESAMIENTO ECG ==========
+
+[AGENDA: Procesamiento] Activando...
 Intervalo PR detectado en ciclo 19
 Intervalo PR detectado en ciclo 18
 Intervalo PR detectado en ciclo 17
@@ -55,8 +59,32 @@ Intervalo QT detectado en ciclo 3
 Intervalo QT detectado en ciclo 2
 Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 91.78743961352656 pul/min (19 ciclos)
+[AGENDA: Procesamiento] Completada
+
+[AGENDA: Diagnóstico] Activando...
 ¡ALERTA: Hipopotasemia detectada en ciclo 1
-Severidad Hipopotasemia: 0,25
+Severidad Hipopotasemia: 0,99 (Severo) - ciclo 1, onda T=-14,91 mV
+¡ALERTA: Isquemia Coronaria detectada en ciclo 1
+Severidad Isquemia: 1,00 (Severo) - ciclo 1, onda T=-14,91 mV
+[AGENDA: Diagnóstico] Completada
+
+[AGENDA: Riesgo Fuzzy] Activando...
+[FUZZY] Sistema JFuzzyLogic inicializado correctamente
+[FUZZY] ================================
+[FUZZY] RIESGO GLOBAL: ALTO
+[FUZZY] Valor numérico: 0,783
+[FUZZY] Patologías detectadas: 2
+[FUZZY] Detectadas 2 patología(s). Isquemia Coronaria (severo), Hipopotasemia (severo)
+[FUZZY] ================================
+[AGENDA: Riesgo Fuzzy] Completada
+
+[AGENDA: Recomendación] Activando...
+
+⚠️ [RECOMENDACIÓN ALTA] CONSULTA CARDIOLÓGICA URGENTE
+[AGENDA: Recomendación] Completada
+
+========== PROCESAMIENTO COMPLETADO ==========
+
 
 ==========================================================
 --- RESUMEN CLÍNICO ---
@@ -64,16 +92,21 @@ Severidad Hipopotasemia: 0,25
 Fichero: hipopotasemia.ecg
 Ciclos detectados: 19
 Frecuencia cardiaca: 91,79 pul/min
-Diagnóstico: Hipopotasemia
+Diagnóstico: Isquemia Coronaria, Hipopotasemia
 
 --- SEVERIDAD DE PATOLOGÍAS (Análisis Difuso) ---
-  - Hipopotasemia: 0,25 (Leve)
+  - Isquemia Coronaria: 1,00 (Severo)
+  - Hipopotasemia: 0,99 (Severo)
 
 --- EVALUACIÓN DE RIESGO GLOBAL (JFuzzyLogic) ---
-Riesgo Global: 15% - BAJO
-Patología única detectada: Hipopotasemia
+Riesgo Global: 78% - ALTO
+Detectadas 2 patología(s). Isquemia Coronaria (severo), Hipopotasemia (severo)
 
 --- RECOMENDACIONES MÉDICAS ---
-[PREVENTIVA] Control médico rutinario - Seguimiento preventivo
-[PRIORITARIA] Control de electrolitos - Análisis de sangre recomendado
+[ALTA_PRIORIDAD] CONSULTA CARDIOLÓGICA URGENTE
+El paciente presenta riesgo cardiológico ALTO. Se recomienda:
+  • Consulta con cardiólogo en 24-48 horas
+  • Realizar ecocardiograma y pruebas complementarias
+  • Monitorización ambulatoria (Holter 24h)
+  • Ajustar tratamiento farmacológico si procede
 ==========================================================

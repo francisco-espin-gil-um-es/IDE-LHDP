@@ -99,45 +99,65 @@ public class ECGProcesador {
                 try (FileOutputStream fos = new FileOutputStream(outFile, true)) {
                     PrintStream tee = new PrintStream(new MultiOutputStream(originalOut, fos), true);
                     System.setOut(tee);
-                    // Ejecutar las reglas (todo lo impreso por reglas irá a consola y al fichero)
+
+                    // ======================================================================
+                    // EJECUCIÓN CON AGENDA-GROUPS (Arquitectura Drools-céntrica)
+                    // ======================================================================
+                    System.out.println("\n========== INICIANDO PROCESAMIENTO ECG ==========\n");
+
+                    // AGENDA 1: Procesamiento - Cálculo de intervalos, complejos, frecuencia
+                    System.out.println("[AGENDA: Procesamiento] Activando...");
+                    kieSession.getAgenda().getAgendaGroup("procesamiento").setFocus();
                     kieSession.fireAllRules();
+                    System.out.println("[AGENDA: Procesamiento] Completada\n");
+
+                    // AGENDA 2: Diagnóstico - Detección de patologías y cálculo de severidades
+                    System.out.println("[AGENDA: Diagnóstico] Activando...");
+                    kieSession.getAgenda().getAgendaGroup("diagnostico").setFocus();
+                    kieSession.fireAllRules();
+                    System.out.println("[AGENDA: Diagnóstico] Completada\n");
+
+                    // AGENDA 3: Riesgo Fuzzy - Evaluación con JFuzzyLogic (invocado desde reglas)
+                    System.out.println("[AGENDA: Riesgo Fuzzy] Activando...");
+                    kieSession.getAgenda().getAgendaGroup("riesgo-fuzzy").setFocus();
+                    kieSession.fireAllRules();
+                    System.out.println("[AGENDA: Riesgo Fuzzy] Completada\n");
+
+                    // AGENDA 4: Recomendación - Generación de recomendaciones médicas
+                    System.out.println("[AGENDA: Recomendación] Activando...");
+                    kieSession.getAgenda().getAgendaGroup("recomendacion").setFocus();
+                    kieSession.fireAllRules();
+                    System.out.println("[AGENDA: Recomendación] Completada\n");
+
+                    System.out.println("========== PROCESAMIENTO COMPLETADO ==========\n");
+
                     tee.flush();
                 } finally {
                     System.setOut(originalOut);
                 }
 
-                // Recuperar diagnósticos y severidades insertados por las reglas
+                // Recuperar objetos insertados por las reglas de la working memory
                 Collection<?> objects = kieSession.getObjects();
                 StringBuilder diagnosticos = new StringBuilder();
-                java.util.List<SeveridadFuzzy> severidadesList = new java.util.ArrayList<>();
+                java.util.List<Diagnostico> diagnosticosList = new java.util.ArrayList<>();
+                RiesgoGlobal riesgoGlobal = null;
+                java.util.List<Recomendacion> recomendacionesList = new java.util.ArrayList<>();
 
                 for (Object obj : objects) {
                     if (obj instanceof Diagnostico) {
+                        Diagnostico d = (Diagnostico) obj;
+                        diagnosticosList.add(d);
                         if (diagnosticos.length() > 0) {
                             diagnosticos.append(", ");
                         }
-                        diagnosticos.append(((Diagnostico) obj).getPatologia());
-                    } else if (obj instanceof SeveridadFuzzy) {
-                        severidadesList.add((SeveridadFuzzy) obj);
+                        diagnosticos.append(d.getPatologia());
+                    } else if (obj instanceof RiesgoGlobal) {
+                        riesgoGlobal = (RiesgoGlobal) obj;
+                    } else if (obj instanceof Recomendacion) {
+                        recomendacionesList.add((Recomendacion) obj);
                     }
                 }
                 String diagnosticoTexto = diagnosticos.length() > 0 ? diagnosticos.toString() : "Sin diagnóstico";
-
-                // FASE 3: Evaluación fuzzy con JFuzzyLogic
-                RiesgoGlobal riesgoGlobal = null;
-                Recomendacion[] recomendaciones = null;
-
-                if (!severidadesList.isEmpty()) {
-                    try {
-                        EvaluadorRiesgoFuzzy evaluador = new EvaluadorRiesgoFuzzy();
-                        riesgoGlobal = evaluador.evaluarRiesgo(severidadesList);
-                        if (riesgoGlobal != null) {
-                            recomendaciones = evaluador.generarRecomendaciones(riesgoGlobal, severidadesList);
-                        }
-                    } catch (Exception e) {
-                        System.err.println("Error en evaluación fuzzy: " + e.getMessage());
-                    }
-                }
 
                 // Añadir resumen al final del fichero individual
                 try (PrintWriter pw = new PrintWriter(new FileWriter(outFile, true))) {
@@ -150,13 +170,17 @@ public class ECGProcesador {
                     pw.printf("Frecuencia cardiaca: %.2f pul/min%n", ecgData.getFrecuenciaCardiaca());
                     pw.println("Diagnóstico: " + diagnosticoTexto);
 
-                    // FASE 3: Información difusa si está disponible
-                    if (!severidadesList.isEmpty()) {
-                        pw.println();
-                        pw.println("--- SEVERIDAD DE PATOLOGÍAS (Análisis Difuso) ---");
-                        for (SeveridadFuzzy sev : severidadesList) {
+                    // FASE 3: Información difusa si está disponible (severidades en Diagnostico)
+                    boolean haySeveridades = false;
+                    for (Diagnostico d : diagnosticosList) {
+                        if (d.getSeveridad() > 0.0) {
+                            if (!haySeveridades) {
+                                pw.println();
+                                pw.println("--- SEVERIDAD DE PATOLOGÍAS (Análisis Difuso) ---");
+                                haySeveridades = true;
+                            }
                             pw.printf("  - %s: %.2f (%s)%n",
-                                    sev.getPatologia(), sev.getSeveridad(), sev.getNivel());
+                                    d.getPatologia(), d.getSeveridad(), d.getNivelSeveridad());
                         }
                     }
 
@@ -166,10 +190,10 @@ public class ECGProcesador {
                         pw.println(riesgoGlobal.toString());
                     }
 
-                    if (recomendaciones != null && recomendaciones.length > 0) {
+                    if (!recomendacionesList.isEmpty()) {
                         pw.println();
                         pw.println("--- RECOMENDACIONES MÉDICAS ---");
-                        for (Recomendacion rec : recomendaciones) {
+                        for (Recomendacion rec : recomendacionesList) {
                             pw.println(rec.toString());
                         }
                     }

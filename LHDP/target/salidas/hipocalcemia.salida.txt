@@ -1,3 +1,7 @@
+
+========== INICIANDO PROCESAMIENTO ECG ==========
+
+[AGENDA: Procesamiento] Activando...
 Intervalo PR detectado en ciclo 16
 Intervalo PR detectado en ciclo 15
 Intervalo PR detectado en ciclo 14
@@ -46,9 +50,31 @@ Intervalo QT detectado en ciclo 3
 Intervalo QT detectado en ciclo 2
 Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 91.69054441260745 pul/min (16 ciclos)
+[AGENDA: Procesamiento] Completada
+
+[AGENDA: Diagnóstico] Activando...
 Complejo QRS ensanchado en ciclo 3: 230.0 ms
 ¡ALERTA: Hipocalcemia detectada en ciclo 3
-Severidad Hipocalcemia: 0,80
+Severidad Hipocalcemia: 1,00 (Severo) - ciclo 3, intervalo QT=520,00 ms
+[AGENDA: Diagnóstico] Completada
+
+[AGENDA: Riesgo Fuzzy] Activando...
+[FUZZY] Sistema JFuzzyLogic inicializado correctamente
+[FUZZY] ================================
+[FUZZY] RIESGO GLOBAL: ALTO
+[FUZZY] Valor numérico: 0,783
+[FUZZY] Patologías detectadas: 1
+[FUZZY] Detectadas 1 patología(s). Hipocalcemia (severo)
+[FUZZY] ================================
+[AGENDA: Riesgo Fuzzy] Completada
+
+[AGENDA: Recomendación] Activando...
+
+⚠️ [RECOMENDACIÓN ALTA] CONSULTA CARDIOLÓGICA URGENTE
+[AGENDA: Recomendación] Completada
+
+========== PROCESAMIENTO COMPLETADO ==========
+
 
 ==========================================================
 --- RESUMEN CLÍNICO ---
@@ -59,13 +85,17 @@ Frecuencia cardiaca: 91,69 pul/min
 Diagnóstico: Hipocalcemia
 
 --- SEVERIDAD DE PATOLOGÍAS (Análisis Difuso) ---
-  - Hipocalcemia: 0,80 (Severo)
+  - Hipocalcemia: 1,00 (Severo)
 
 --- EVALUACIÓN DE RIESGO GLOBAL (JFuzzyLogic) ---
-Riesgo Global: 0% - BAJO
-Patología única detectada: Hipocalcemia
+Riesgo Global: 78% - ALTO
+Detectadas 1 patología(s). Hipocalcemia (severo)
 
 --- RECOMENDACIONES MÉDICAS ---
-[PREVENTIVA] Control médico rutinario - Seguimiento preventivo
-[PRIORITARIA] Control de electrolitos - Análisis de sangre recomendado
+[ALTA_PRIORIDAD] CONSULTA CARDIOLÓGICA URGENTE
+El paciente presenta riesgo cardiológico ALTO. Se recomienda:
+  • Consulta con cardiólogo en 24-48 horas
+  • Realizar ecocardiograma y pruebas complementarias
+  • Monitorización ambulatoria (Holter 24h)
+  • Ajustar tratamiento farmacológico si procede
 ==========================================================

@@ -1,3 +1,7 @@
+
+========== INICIANDO PROCESAMIENTO ECG ==========
+
+[AGENDA: Procesamiento] Activando...
 Intervalo PR detectado en ciclo 16
 Intervalo PR detectado en ciclo 15
 Intervalo PR detectado en ciclo 14
@@ -46,8 +50,31 @@ Intervalo QT detectado en ciclo 3
 Intervalo QT detectado en ciclo 2
 Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 44.44444444444444 pul/min (16 ciclos)
+[AGENDA: Procesamiento] Completada
+
+[AGENDA: Diagnóstico] Activando...
 ¡ALERTA: Bradicardia detectada!
-Severidad Bradicardia: 0,39
+Severidad Bradicardia: 0,51 (Moderado)
+[AGENDA: Diagnóstico] Completada
+
+[AGENDA: Riesgo Fuzzy] Activando...
+✓ Sistema fuzzy inicializado correctamente desde Drools
+[FUZZY] Sistema JFuzzyLogic inicializado correctamente
+[FUZZY] ================================
+[FUZZY] RIESGO GLOBAL: MEDIO
+[FUZZY] Valor numérico: 0,500
+[FUZZY] Patologías detectadas: 1
+[FUZZY] Detectadas 1 patología(s). Bradicardia (moderado)
+[FUZZY] ================================
+[AGENDA: Riesgo Fuzzy] Completada
+
+[AGENDA: Recomendación] Activando...
+
+📋 [RECOMENDACIÓN MEDIA] EVALUACIÓN CARDIOLÓGICA PROGRAMADA
+[AGENDA: Recomendación] Completada
+
+========== PROCESAMIENTO COMPLETADO ==========
+
 
 ==========================================================
 --- RESUMEN CLÍNICO ---
@@ -58,12 +85,17 @@ Frecuencia cardiaca: 44,44 pul/min
 Diagnóstico: Bradicardia
 
 --- SEVERIDAD DE PATOLOGÍAS (Análisis Difuso) ---
-  - Bradicardia: 0,39 (Leve)
+  - Bradicardia: 0,51 (Moderado)
 
 --- EVALUACIÓN DE RIESGO GLOBAL (JFuzzyLogic) ---
-Riesgo Global: 47% - MEDIO
-Patología única detectada: Bradicardia
+Riesgo Global: 50% - MEDIO
+Detectadas 1 patología(s). Bradicardia (moderado)
 
 --- RECOMENDACIONES MÉDICAS ---
-[SEGUIMIENTO] Consulta con cardiólogo en los próximos 7 días
+[SEGUIMIENTO] EVALUACIÓN CARDIOLÓGICA PROGRAMADA
+El paciente presenta riesgo cardiológico MEDIO. Se recomienda:
+  • Programar consulta cardiológica en 1-2 semanas
+  • Realizar ECG de control
+  • Analítica completa (ionograma, marcadores cardiacos)
+  • Seguimiento de factores de riesgo cardiovascular
 ==========================================================
