@@ -1,3 +1,7 @@
+
+========== INICIANDO PROCESAMIENTO ECG ==========
+
+[AGENDA: Procesamiento] Activando...
 Intervalo PR detectado en ciclo 18
 Intervalo PR detectado en ciclo 17
 Intervalo PR detectado en ciclo 16
@@ -52,12 +56,22 @@ Intervalo QT detectado en ciclo 3
 Intervalo QT detectado en ciclo 2
 Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 91.13924050632912 pul/min (18 ciclos)
+[AGENDA: Procesamiento] Completada
+
+[AGENDA: Diagnóstico] Activando...
 Complejo QRS ensanchado en ciclo 4: 230.0 ms
 ¡ALERTA: Hipocalcemia detectada en ciclo 4
 ¡ALERTA: Isquemia Coronaria detectada en ciclo 4
+[AGENDA: Diagnóstico] Completada
 
---- Resumen ---
+========== PROCESAMIENTO COMPLETADO ==========
+
+
+==========================================================
+--- RESUMEN CLÍNICO ---
+==========================================================
 Fichero: hipocalcemia_isqcoronaria.ecg
 Ciclos detectados: 18
 Frecuencia cardiaca: 91,14 pul/min
-Diagnóstico: Hipocalcemia, Isquemia Coronaria
+Diagnóstico: Isquemia Coronaria, Hipocalcemia
+==========================================================

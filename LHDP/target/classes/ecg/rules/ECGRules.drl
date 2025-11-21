@@ -15,9 +15,15 @@ import ecg.IntervaloRR;
 import ecg.FrecuenciaCardiaca;
 import ecg.Diagnostico;
 
+// ========================================================================
+// AGENDA: PROCESAMIENTO
+// Cálculo de intervalos, complejos y frecuencia cardíaca
+// ========================================================================
+
 // Regla 1: Detectar Intervalo PR
 // Cuando hay una P y una Q del mismo ciclo, crear el intervalo PR
 rule "Detectar Intervalo PR"
+agenda-group "procesamiento"
 when
     $p : OndaP( $ciclo : ciclo, $inicioP : inicio )
     $q : OndaQ( ciclo == $ciclo, $inicioQ : inicio )
@@ -30,6 +36,7 @@ end
 // Regla 2: Detectar Complejo QRS
 // Cuando hay una Q y una S del mismo ciclo, crear el complejo QRS
 rule "Detectar Complejo QRS"
+agenda-group "procesamiento"
 when
     $q : OndaQ( $ciclo : ciclo, $inicioQ : inicio )
     $s : OndaS( ciclo == $ciclo, $finS : fin )
@@ -42,6 +49,7 @@ end
 // Regla 3: Detectar Intervalo QT
 // Cuando hay una Q y una T del mismo ciclo, crear el intervalo QT
 rule "Detectar Intervalo QT"
+agenda-group "procesamiento"
 when
     $q : OndaQ( $ciclo : ciclo, $inicioQ : inicio )
     $t : OndaT( ciclo == $ciclo, $finT : fin )
@@ -54,6 +62,7 @@ end
 // Regla 4: Detectar Intervalo RR
 // Cuando hay dos ondas R de ciclos consecutivos, crear el intervalo RR
 rule "Detectar Intervalo RR"
+agenda-group "procesamiento"
 when
     $r1 : OndaR( $ciclo1 : ciclo, $tiempoR1 : inicio )
     $r2 : OndaR( ciclo == ($ciclo1 + 1), $tiempoR2 : inicio )
@@ -65,6 +74,7 @@ end
 // Regla 5: Calcular Frecuencia Cardíaca
 // Usa el primer y último intervalo RR para calcular la FC
 rule "Calcular Frecuencia Cardiaca"
+agenda-group "procesamiento"
 when
     $r1 : OndaR( $primerCiclo : ciclo, $tiempoInicio : inicio )
     not( OndaR( ciclo < $primerCiclo ) )
@@ -82,6 +92,7 @@ end
 
 // Regla 6: Actualizar ECGData con la frecuencia calculada
 rule "Actualizar ECGData con Frecuencia"
+agenda-group "procesamiento"
 when
     $fc : FrecuenciaCardiaca( $valor : valor )
     $ecg : ECGData( frecuenciaCardiaca == 0.0 )
@@ -89,8 +100,14 @@ then
     modify($ecg) { setFrecuenciaCardiaca($valor) };
 end
 
+// ========================================================================
+// AGENDA: DIAGNÓSTICO
+// Detección de patologías cardíacas
+// ========================================================================
+
 // Regla 7: Detectar Taquicardia
 rule "Taquicardia"
+agenda-group "diagnostico"
 when
     FrecuenciaCardiaca( valor > 100 )
     not( Diagnostico( patologia == "Taquicardia" ) )
@@ -101,6 +118,7 @@ end
 
 // Regla 8: Detectar Bradicardia
 rule "Bradicardia"
+agenda-group "diagnostico"
 when
     FrecuenciaCardiaca( valor > 0, valor < 60 )
     not( Diagnostico( patologia == "Bradicardia" ) )
@@ -111,6 +129,7 @@ end
 
 // Regla 9: Informar Intervalos PR anormales
 rule "Intervalo PR anormal"
+agenda-group "diagnostico"
 when
     $pr : IntervaloPR( duracion < 120 || duracion > 200 )
 then
@@ -119,6 +138,7 @@ end
 
 // Regla 10: Informar Complejo QRS anormal
 rule "Complejo QRS anormal"
+agenda-group "diagnostico"
 when
     $qrs : ComplejoQRS( duracion > 120 )
 then
@@ -127,6 +147,7 @@ end
 
 // Regla 11: Detectar Hipocalcemia (QT prolongado >440ms)
 rule "Hipocalcemia"
+agenda-group "diagnostico"
 when
     $qt : IntervaloQT( duracion > 440 )
     not( Diagnostico( patologia == "Hipocalcemia" ) )
@@ -137,6 +158,7 @@ end
 
 // Regla 12: Detectar Hipopotasemia (onda T muy negativa)
 rule "Hipopotasemia"
+agenda-group "diagnostico"
 when
     $t : OndaT( pico < -10 )
     not( Diagnostico( patologia == "Hipopotasemia" ) )
@@ -147,6 +169,7 @@ end
 
 // Regla 13: Detectar IAM - Infarto Agudo de Miocardio (onda T muy elevada >10)
 rule "Infarto Agudo de Miocardio"
+agenda-group "diagnostico"
 when
     $t : OndaT( pico > 10 )
     not( Diagnostico( patologia == "Infarto Agudo de Miocardio" ) )
@@ -157,6 +180,7 @@ end
 
 // Regla 14: Detectar Isquemia Coronaria (onda T negativa entre -9 y -10)
 rule "Isquemia Coronaria"
+agenda-group "diagnostico"
 when
     $t : OndaT( pico < -9, pico >= -10 )
     not( Diagnostico( patologia == "Isquemia Coronaria" ) )
@@ -167,6 +191,7 @@ end
 
 // Regla 15: Detectar Contracción Ventricular Prematura (QRS muy corto <30ms)
 rule "Contracción Ventricular Prematura"
+agenda-group "diagnostico"
 when
     $qrs : ComplejoQRS( duracion < 30 )
     not( Diagnostico( patologia == "Contracción Ventricular Prematura" ) )
@@ -177,6 +202,7 @@ end
 
 // Regla 16: ECG Normal (si no hay patologías detectadas)
 rule "ECG Normal"
+agenda-group "diagnostico"
 when
     FrecuenciaCardiaca( valor >= 60, valor <= 100 )
     not( Diagnostico() )

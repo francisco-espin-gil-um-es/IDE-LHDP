@@ -1,3 +1,7 @@
+
+========== INICIANDO PROCESAMIENTO ECG ==========
+
+[AGENDA: Procesamiento] Activando...
 Intervalo PR detectado en ciclo 16
 Intervalo PR detectado en ciclo 15
 Intervalo PR detectado en ciclo 14
@@ -46,10 +50,20 @@ Intervalo QT detectado en ciclo 3
 Intervalo QT detectado en ciclo 2
 Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 92.7536231884058 pul/min (16 ciclos)
-¡ALERTA: Infarto Agudo de Miocardio (IAM) detectado en ciclo 1
+[AGENDA: Procesamiento] Completada
 
---- Resumen ---
+[AGENDA: Diagnóstico] Activando...
+¡ALERTA: Infarto Agudo de Miocardio (IAM) detectado en ciclo 1
+[AGENDA: Diagnóstico] Completada
+
+========== PROCESAMIENTO COMPLETADO ==========
+
+
+==========================================================
+--- RESUMEN CLÍNICO ---
+==========================================================
 Fichero: iam.ecg
 Ciclos detectados: 16
 Frecuencia cardiaca: 92,75 pul/min
 Diagnóstico: Infarto Agudo de Miocardio
+==========================================================

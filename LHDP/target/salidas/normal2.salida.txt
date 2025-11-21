@@ -1,3 +1,7 @@
+
+========== INICIANDO PROCESAMIENTO ECG ==========
+
+[AGENDA: Procesamiento] Activando...
 Intervalo PR detectado en ciclo 67
 Intervalo PR detectado en ciclo 66
 Intervalo PR detectado en ciclo 65
@@ -199,10 +203,20 @@ Intervalo QT detectado en ciclo 3
 Intervalo QT detectado en ciclo 2
 Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 88.27404479578394 pul/min (67 ciclos)
-ECG Normal - Sin patologías detectadas
+[AGENDA: Procesamiento] Completada
 
---- Resumen ---
+[AGENDA: Diagnóstico] Activando...
+ECG Normal - Sin patologías detectadas
+[AGENDA: Diagnóstico] Completada
+
+========== PROCESAMIENTO COMPLETADO ==========
+
+
+==========================================================
+--- RESUMEN CLÍNICO ---
+==========================================================
 Fichero: normal2.ecg
 Ciclos detectados: 67
 Frecuencia cardiaca: 88,27 pul/min
 Diagnóstico: Normal
+==========================================================

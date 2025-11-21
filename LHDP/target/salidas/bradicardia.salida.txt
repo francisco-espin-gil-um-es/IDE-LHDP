@@ -1,3 +1,7 @@
+
+========== INICIANDO PROCESAMIENTO ECG ==========
+
+[AGENDA: Procesamiento] Activando...
 Intervalo PR detectado en ciclo 16
 Intervalo PR detectado en ciclo 15
 Intervalo PR detectado en ciclo 14
@@ -46,10 +50,20 @@ Intervalo QT detectado en ciclo 3
 Intervalo QT detectado en ciclo 2
 Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 44.44444444444444 pul/min (16 ciclos)
-¡ALERTA: Bradicardia detectada!
+[AGENDA: Procesamiento] Completada
 
---- Resumen ---
+[AGENDA: Diagnóstico] Activando...
+¡ALERTA: Bradicardia detectada!
+[AGENDA: Diagnóstico] Completada
+
+========== PROCESAMIENTO COMPLETADO ==========
+
+
+==========================================================
+--- RESUMEN CLÍNICO ---
+==========================================================
 Fichero: bradicardia.ecg
 Ciclos detectados: 16
 Frecuencia cardiaca: 44,44 pul/min
 Diagnóstico: Bradicardia
+==========================================================

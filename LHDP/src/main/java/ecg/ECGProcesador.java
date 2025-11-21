@@ -99,8 +99,24 @@ public class ECGProcesador {
                 try (FileOutputStream fos = new FileOutputStream(outFile, true)) {
                     PrintStream tee = new PrintStream(new MultiOutputStream(originalOut, fos), true);
                     System.setOut(tee);
-                    // Ejecutar las reglas (todo lo impreso por reglas irá a consola y al fichero)
+
+                    // Ejecutar las reglas usando AGENDAS en orden
+                    System.out.println("\n========== INICIANDO PROCESAMIENTO ECG ==========\n");
+
+                    // FASE 1: Procesamiento - Calcular intervalos y frecuencia
+                    System.out.println("[AGENDA: Procesamiento] Activando...");
+                    kieSession.getAgenda().getAgendaGroup("procesamiento").setFocus();
                     kieSession.fireAllRules();
+                    System.out.println("[AGENDA: Procesamiento] Completada\n");
+
+                    // FASE 2: Diagnóstico - Detectar patologías
+                    System.out.println("[AGENDA: Diagnóstico] Activando...");
+                    kieSession.getAgenda().getAgendaGroup("diagnostico").setFocus();
+                    kieSession.fireAllRules();
+                    System.out.println("[AGENDA: Diagnóstico] Completada\n");
+
+                    System.out.println("========== PROCESAMIENTO COMPLETADO ==========\n");
+
                     tee.flush();
                 } finally {
                     System.setOut(originalOut);
@@ -122,11 +138,14 @@ public class ECGProcesador {
                 // Añadir resumen al final del fichero individual
                 try (PrintWriter pw = new PrintWriter(new FileWriter(outFile, true))) {
                     pw.println();
-                    pw.println("--- Resumen ---");
+                    pw.println("==========================================================");
+                    pw.println("--- RESUMEN CLÍNICO ---");
+                    pw.println("==========================================================");
                     pw.println("Fichero: " + ecgFile.getName());
                     pw.println("Ciclos detectados: " + ecgData.getNumeroCiclos());
                     pw.printf("Frecuencia cardiaca: %.2f pul/min%n", ecgData.getFrecuenciaCardiaca());
                     pw.println("Diagnóstico: " + diagnosticoTexto);
+                    pw.println("==========================================================");
                 }
 
                 // Añadir al consolidado todo.salida.txt

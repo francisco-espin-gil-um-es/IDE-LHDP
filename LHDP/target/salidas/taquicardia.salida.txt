@@ -1,3 +1,7 @@
+
+========== INICIANDO PROCESAMIENTO ECG ==========
+
+[AGENDA: Procesamiento] Activando...
 Intervalo PR detectado en ciclo 15
 Intervalo PR detectado en ciclo 14
 Intervalo PR detectado en ciclo 13
@@ -43,6 +47,9 @@ Intervalo QT detectado en ciclo 3
 Intervalo QT detectado en ciclo 2
 Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 149.5016611295681 pul/min (15 ciclos)
+[AGENDA: Procesamiento] Completada
+
+[AGENDA: Diagnóstico] Activando...
 ¡ALERTA: Taquicardia detectada!
 Intervalo PR anormal en ciclo 15: 25.0 ms
 Intervalo PR anormal en ciclo 14: 25.0 ms
@@ -59,9 +66,16 @@ Intervalo PR anormal en ciclo 4: 25.0 ms
 Intervalo PR anormal en ciclo 3: 25.0 ms
 Intervalo PR anormal en ciclo 2: 25.0 ms
 Intervalo PR anormal en ciclo 1: 25.0 ms
+[AGENDA: Diagnóstico] Completada
 
---- Resumen ---
+========== PROCESAMIENTO COMPLETADO ==========
+
+
+==========================================================
+--- RESUMEN CLÍNICO ---
+==========================================================
 Fichero: taquicardia.ecg
 Ciclos detectados: 15
 Frecuencia cardiaca: 149,50 pul/min
 Diagnóstico: Taquicardia
+==========================================================
