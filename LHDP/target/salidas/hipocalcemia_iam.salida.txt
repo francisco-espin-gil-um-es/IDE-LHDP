@@ -50,6 +50,7 @@ Intervalo QT detectado en ciclo 3
 Intervalo QT detectado en ciclo 2
 Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 92.3076923076923 pul/min (16 ciclos)
+Intervalo RR promedio: 693,33 ms
 [AGENDA: Procesamiento] Completada
 
 [AGENDA: Diagnóstico] Activando...
@@ -67,5 +68,5 @@ Complejo QRS ensanchado en ciclo 1: 230.0 ms
 Fichero: hipocalcemia_iam.ecg
 Ciclos detectados: 16
 Frecuencia cardiaca: 92,31 pul/min
-Diagnóstico: Infarto Agudo de Miocardio, Hipocalcemia
+Diagnóstico: Hipocalcemia, Infarto Agudo de Miocardio
 ==========================================================

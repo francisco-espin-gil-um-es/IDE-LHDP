@@ -14,6 +14,7 @@ import ecg.IntervaloQT;
 import ecg.IntervaloRR;
 import ecg.FrecuenciaCardiaca;
 import ecg.Diagnostico;
+import ecg.RRPromedio;
 
 // ========================================================================
 // AGENDA: PROCESAMIENTO
@@ -98,6 +99,26 @@ when
     $ecg : ECGData( frecuenciaCardiaca == 0.0 )
 then
     modify($ecg) { setFrecuenciaCardiaca($valor) };
+end
+
+// Regla 7: Calcular Intervalo RR Promedio
+// Necesario para detectar prematuridad en CVP
+rule "Calcular RR Promedio"
+agenda-group "procesamiento"
+salience -10  // Ejecutar después de crear todos los intervalos RR
+when
+    $intervalos : java.util.List() from collect( IntervaloRR() )
+    not( RRPromedio() )
+    eval( $intervalos.size() > 0 )
+then
+    double suma = 0.0;
+    for (Object obj : $intervalos) {
+        IntervaloRR rr = (IntervaloRR) obj;
+        suma += rr.getDuracion();
+    }
+    double promedio = suma / $intervalos.size();
+    insert( new RRPromedio(promedio) );
+    System.out.println("Intervalo RR promedio: " + String.format("%.2f", promedio) + " ms");
 end
 
 // ========================================================================
@@ -189,15 +210,37 @@ then
     System.out.println("¡ALERTA: Isquemia Coronaria detectada en ciclo " + $t.getCiclo());
 end
 
-// Regla 15: Detectar Contracción Ventricular Prematura (QRS muy corto <30ms)
+// Regla 15: Detectar Contracción Ventricular Prematura (CVP)
+// CRITERIO MEJORADO: QRS ancho + latido prematuro (adelantado >20%)
+// Evita falsos positivos con Bloqueos de Rama (que son rítmicos)
 rule "Contracción Ventricular Prematura"
 agenda-group "diagnostico"
 when
-    $qrs : ComplejoQRS( duracion < 30 )
+    // CRITERIO 1: Complejo QRS ancho (>120ms) - típico de origen ventricular
+    $qrs : ComplejoQRS( duracion > 120, $ciclo : ciclo )
+    
+    // CRITERIO 2: El intervalo RR que precede a este ciclo es más corto (prematuro)
+    $rrActual : IntervaloRR( 
+        cicloSiguiente == $ciclo, 
+        $duracionActual : duracion 
+    )
+    
+    // Obtener el RR promedio del ritmo base
+    $rrPromedio : RRPromedio( $valorPromedio : valor )
+    
+    // Verificar prematuridad: el RR actual es <80% del promedio (se adelantó >20%)
+    eval( $duracionActual < ($valorPromedio * 0.8) )
+    
     not( Diagnostico( patologia == "Contracción Ventricular Prematura" ) )
 then
-    insert( new Diagnostico("Contracción Ventricular Prematura", "QRS corto: " + $qrs.getDuracion() + " ms") );
-    System.out.println("¡ALERTA: Contracción Ventricular Prematura detectada en ciclo " + $qrs.getCiclo());
+    insert( new Diagnostico("Contracción Ventricular Prematura", 
+            "CVP confirmada: QRS ancho (" + String.format("%.0f", $qrs.getDuracion()) + 
+            " ms) y prematuro (RR=" + String.format("%.0f", $duracionActual) + 
+            " ms vs promedio=" + String.format("%.0f", $valorPromedio) + " ms)") );
+    System.out.println("¡ALERTA: CVP detectada en ciclo " + $ciclo + 
+                      " (QRS=" + String.format("%.0f", $qrs.getDuracion()) + " ms, " +
+                      "RR=" + String.format("%.0f", $duracionActual) + " ms < 80% de " + 
+                      String.format("%.0f", $valorPromedio) + " ms)");
 end
 
 // Regla 16: ECG Normal (si no hay patologías detectadas)

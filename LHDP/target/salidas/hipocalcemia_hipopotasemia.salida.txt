@@ -53,6 +53,7 @@ Intervalo QT detectado en ciclo 3
 Intervalo QT detectado en ciclo 2
 Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 91.3978494623656 pul/min (17 ciclos)
+Intervalo RR promedio: 697,50 ms
 [AGENDA: Procesamiento] Completada
 
 [AGENDA: Diagnóstico] Activando...

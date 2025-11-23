@@ -13,10 +13,10 @@ Fichero: hipocalcemia_hipopotasemia.ecg
 Diagnóstico: Hipopotasemia, Hipocalcemia
 
 Fichero: hipocalcemia_iam.ecg
-Diagnóstico: Infarto Agudo de Miocardio, Hipocalcemia
+Diagnóstico: Hipocalcemia, Infarto Agudo de Miocardio
 
 Fichero: hipocalcemia_isqcoronaria.ecg
-Diagnóstico: Isquemia Coronaria, Hipocalcemia
+Diagnóstico: Hipocalcemia, Isquemia Coronaria
 
 Fichero: hipopotasemia.ecg
 Diagnóstico: Hipopotasemia

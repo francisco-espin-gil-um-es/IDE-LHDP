@@ -56,6 +56,7 @@ Intervalo QT detectado en ciclo 3
 Intervalo QT detectado en ciclo 2
 Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 91.13924050632912 pul/min (18 ciclos)
+Intervalo RR promedio: 697,06 ms
 [AGENDA: Procesamiento] Completada
 
 [AGENDA: Diagnóstico] Activando...
@@ -73,5 +74,5 @@ Complejo QRS ensanchado en ciclo 4: 230.0 ms
 Fichero: hipocalcemia_isqcoronaria.ecg
 Ciclos detectados: 18
 Frecuencia cardiaca: 91,14 pul/min
-Diagnóstico: Isquemia Coronaria, Hipocalcemia
+Diagnóstico: Hipocalcemia, Isquemia Coronaria
 ==========================================================
