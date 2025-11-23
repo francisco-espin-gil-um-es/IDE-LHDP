@@ -53,6 +53,7 @@ Intervalo QT detectado en ciclo 3
 Intervalo QT detectado en ciclo 2
 Intervalo QT detectado en ciclo 1
 Frecuencia cardiaca: 91.3978494623656 pul/min (17 ciclos)
+Intervalo RR promedio: 697,50 ms
 [AGENDA: Procesamiento] Completada
 
 [AGENDA: Diagnóstico] Activando...
@@ -89,12 +90,12 @@ Severidad Isquemia: 1,00 (Severo) - ciclo 6, onda T=-14,92 mV
 Fichero: hipocalcemia_hipopotasemia.ecg
 Ciclos detectados: 17
 Frecuencia cardiaca: 91,40 pul/min
-Diagnóstico: Hipocalcemia, Isquemia Coronaria, Hipopotasemia
+Diagnóstico: Hipopotasemia, Hipocalcemia, Isquemia Coronaria
 
 --- SEVERIDAD DE PATOLOGÍAS (Análisis Difuso) ---
+  - Hipopotasemia: 0,99 (Severo)
   - Hipocalcemia: 1,00 (Severo)
   - Isquemia Coronaria: 1,00 (Severo)
-  - Hipopotasemia: 0,99 (Severo)
 
 --- EVALUACIÓN DE RIESGO GLOBAL (JFuzzyLogic) ---
 Riesgo Global: 78% - ALTO

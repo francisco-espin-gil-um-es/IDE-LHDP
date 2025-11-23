@@ -13,7 +13,7 @@ Diagnóstico: Hipocalcemia
 Riesgo: ALTO
 
 Fichero: hipocalcemia_hipopotasemia.ecg
-Diagnóstico: Hipocalcemia, Isquemia Coronaria, Hipopotasemia
+Diagnóstico: Hipopotasemia, Hipocalcemia, Isquemia Coronaria
 Riesgo: ALTO
 
 Fichero: hipocalcemia_iam.ecg
@@ -21,7 +21,7 @@ Diagnóstico: Infarto Agudo de Miocardio, Hipocalcemia
 Riesgo: ALTO
 
 Fichero: hipocalcemia_isqcoronaria.ecg
-Diagnóstico: Isquemia Coronaria, Hipopotasemia, Hipocalcemia
+Diagnóstico: Hipopotasemia, Isquemia Coronaria, Hipocalcemia
 Riesgo: MEDIO
 
 Fichero: hipopotasemia.ecg
